@@ -6,9 +6,9 @@ import (
 )
 
 func (r *EmployeeRepo) FindEmployee(id int) (*model.Employee, error) {
-	eployee, exists := r.employees[id]
+	employee, exists := r.employees[id]
 	if !exists {
 		return nil, fmt.Errorf("Employee not found")
 	}
-	return eployee, nil
+	return employee, nil
 }
