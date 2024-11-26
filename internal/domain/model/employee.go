@@ -33,3 +33,7 @@ func NewEmployee(name, surname, phone, email string, post EmployeeRole, now time
 		UpdatedAt: now,
 	}
 }
+
+func (e *Employee) IsCanOrderCreate() bool {
+	return e.Post == Manager
+}

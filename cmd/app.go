@@ -20,7 +20,7 @@ func main() {
 	positionUseCase := position_usecase.NewPositionUseCase(positionRepo)
 	orderUseCase := order_usecase.NewOrderUseCase(orderRepo)
 
-	employee, err := employeeUseCase.CreateEmployeeUC(employee_usecase.CreateEmployeeReq{
+	createEmployee, err := employeeUseCase.CreateEmployeeUC(employee_usecase.CreateEmployeeReq{
 		Name:    "Denis",
 		Surname: "Popov",
 		Phone:   "79995398037",
@@ -41,7 +41,7 @@ func main() {
 	order, _ := orderUseCase.CreateOrderUC(
 		position)
 
-	fmt.Println(employee)
+	fmt.Println(createEmployee)
 	fmt.Println(position)
 	fmt.Println(order)
 
