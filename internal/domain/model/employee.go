@@ -11,12 +11,12 @@ const (
 )
 
 type Employee struct {
-	ID        int
+	ID        int64
 	Name      string
 	Surname   string
 	Phone     string
 	Email     string
-	Post      EmployeeRole
+	Role      EmployeeRole
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	DeletedAt *time.Time
@@ -28,12 +28,16 @@ func NewEmployee(name, surname, phone, email string, post EmployeeRole, now time
 		Surname:   surname,
 		Phone:     phone,
 		Email:     email,
-		Post:      post,
+		Role:      post,
 		CreatedAt: now,
 		UpdatedAt: now,
 	}
 }
 
 func (e *Employee) IsCanOrderCreate() bool {
-	return e.Post == Manager
+	return e.Role == Manager
+}
+
+func (e *Employee) ChangeRole(newRole EmployeeRole) {
+	e.Role = newRole
 }

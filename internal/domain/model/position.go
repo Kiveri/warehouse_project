@@ -12,7 +12,7 @@ const (
 )
 
 type Position struct {
-	ID        int
+	ID        int64
 	Name      string
 	Barcode   string
 	Price     float32
