@@ -4,10 +4,10 @@ import (
 	"fmt"
 )
 
-func (r *PositionRepo) DeletePosition(id int) error {
-	if _, exists := r.positionsMap[id]; !exists {
+func (pr *PositionRepo) DeletePosition(id int) error {
+	if _, exists := pr.positionsMap[id]; !exists {
 		return fmt.Errorf("position does not exist")
 	}
-	delete(r.positionsMap, id)
+	delete(pr.positionsMap, id)
 	return nil
 }

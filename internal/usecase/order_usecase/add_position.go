@@ -6,24 +6,20 @@ import (
 	"warehouse_project/internal/domain/model"
 )
 
-func (uc *OrderUseCase) AddPositions(id []int) (*model.Order, error) {
+type CreateOrderReq struct {
+	PositionsId []int
+}
+
+func (ou *OrderUseCase) CreateOrder(req CreateOrderReq) *model.Order {
 	var positions []model.Position
-	for _, id := range id {
-		position, exists := uc.positionRepo.FindPosition(id)
-		if exists != nil {
-			return &model.Order{}, fmt.Errorf("position not found")
+	for _, positionsId := range req.PositionsId {
+		if position, exists := ou.positionRepo.FindPosition(positionsId); exists {
+			positions = append(positions, *position)
+		} else {
+			fmt.Println("position does not exist")
 		}
-
-		positions = append(positions, *position)
 	}
 
-	order := model.Order{
-		Positions: positions,
-		Status:    model.Created,
-		DelType:   model.CourierDelivery,
-		CreatedAt: time.Now(),
-	}
-
-	uc.orderRepo.CreateOrder(&order)
-	return &order, nil
+	order := model.NewOrder(positions, model.OrderStatus(model.Created), model.DeliveryType(model.CourierDelivery), time.Now())
+	return ou.orderRepo.CreateOrder(order)
 }

@@ -2,9 +2,9 @@ package position_db
 
 import "warehouse_project/internal/domain/model"
 
-func (r *PositionRepo) CreatePosition(position *model.Position) (*model.Position, error) {
-	position.ID = r.nextID
-	r.positionsMap[position.ID] = position
-	r.nextID++
+func (pr *PositionRepo) CreatePosition(position *model.Position) (*model.Position, error) {
+	position.ID = pr.nextID
+	pr.positionsMap[position.ID] = position
+	pr.nextID++
 	return position, nil
 }

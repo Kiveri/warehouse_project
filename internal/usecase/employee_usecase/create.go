@@ -14,10 +14,10 @@ type CreateEmployeeReq struct {
 	Post    model.EmployeeRole
 }
 
-func (u *EmployeeUseCase) CreateEmployee(req CreateEmployeeReq) (*model.Employee, error) {
+func (eu *EmployeeUseCase) CreateEmployee(req CreateEmployeeReq) (*model.Employee, error) {
 	now := time.Now()
 	employee := model.NewEmployee(req.Name, req.Surname, req.Phone, req.Email, req.Post, now)
-	employee, err := u.r.CreateEmployee(employee)
+	employee, err := eu.er.CreateEmployee(employee)
 	if err != nil {
 		return nil, fmt.Errorf("CreateEmployeeUC err: %w", err)
 	}

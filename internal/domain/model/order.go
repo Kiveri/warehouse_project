@@ -23,15 +23,22 @@ type Order struct {
 	Positions []Position
 	Status    OrderStatus
 	DelType   DeliveryType
+	Total     float32
 	CreatedAt time.Time
 	UpdatedAt *time.Time
 }
 
 func NewOrder(positions []Position, status OrderStatus, delType DeliveryType, now time.Time) *Order {
+	var total float32
+	for _, position := range positions {
+		total += position.Price
+	}
+
 	return &Order{
 		Positions: positions,
 		Status:    status,
 		DelType:   delType,
+		Total:     total,
 		CreatedAt: now,
 	}
 }

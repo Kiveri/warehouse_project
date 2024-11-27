@@ -1,5 +1,5 @@
 package employee_usecase
 
-func (u *EmployeeUseCase) DeleteEmployeeUC(id int) error {
-	return u.r.DeleteEmployee(id)
+func (eu *EmployeeUseCase) DeleteEmployeeUC(id int) error {
+	return eu.er.DeleteEmployee(id)
 }

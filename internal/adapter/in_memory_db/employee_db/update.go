@@ -5,10 +5,10 @@ import (
 	"warehouse_project/internal/domain/model"
 )
 
-func (r *EmployeeRepo) UpdateEmployee(employee *model.Employee) error {
-	if _, exists := r.employees[employee.ID]; !exists {
+func (er *EmployeeRepo) UpdateEmployee(employee *model.Employee) error {
+	if _, exists := er.employees[employee.ID]; !exists {
 		return fmt.Errorf("employee with id %v does not exist", employee.ID)
 	}
-	r.employees[employee.ID] = employee
+	er.employees[employee.ID] = employee
 	return nil
 }

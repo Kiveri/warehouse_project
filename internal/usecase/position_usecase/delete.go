@@ -1,5 +1,5 @@
 package position_usecase
 
-func (u *PositionUseCase) DeletePositionUC(id int) error {
-	return u.r.DeletePosition(id)
+func (pu *PositionUseCase) DeletePositionUC(id int) error {
+	return pu.pr.DeletePosition(id)
 }
