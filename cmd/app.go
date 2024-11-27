@@ -18,14 +18,14 @@ func main() {
 
 	employeeUseCase := employee_usecase.NewEmployeeUseCase(employeeRepo)
 	positionUseCase := position_usecase.NewPositionUseCase(positionRepo)
-	orderUseCase := order_usecase.NewOrderUseCase(orderRepo, positionRepo)
+	orderUseCase := order_usecase.NewOrderUseCase(orderRepo, positionRepo, employeeRepo)
 
 	createEmployee, err := employeeUseCase.CreateEmployee(employee_usecase.CreateEmployeeReq{
 		Name:    "Denis",
 		Surname: "Popov",
 		Phone:   "79995398037",
 		Email:   "denpopov.m@gmail.com",
-		Post:    model.Leader,
+		Role:    model.Manager,
 	})
 	if err != nil {
 		fmt.Println(err)
@@ -62,9 +62,15 @@ func main() {
 	}
 
 	orderReq := order_usecase.CreateOrderReq{
-		PositionsId: []int{Position1.ID, Position2.ID},
+		EmployeeID:   createEmployee.ID,
+		PositionsIDs: []int64{Position1.ID, Position2.ID},
+		DeliveryType: model.CourierDelivery,
 	}
-	order := orderUseCase.CreateOrder(orderReq)
+
+	order, err := orderUseCase.CreateOrder(orderReq)
+	if err != nil {
+		fmt.Println(err)
+	}
 
 	fmt.Println(createEmployee)
 	fmt.Println(Position1, Position2, Position3)

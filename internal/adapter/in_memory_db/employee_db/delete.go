@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-func (er *EmployeeRepo) DeleteEmployee(id int) error {
+func (er *EmployeeRepo) DeleteEmployee(id int64) error {
 	if _, exists := er.employees[id]; !exists {
 		return fmt.Errorf("Employee not found")
 	}

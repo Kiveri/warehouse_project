@@ -11,15 +11,15 @@ type CreateEmployeeReq struct {
 	Surname string
 	Phone   string
 	Email   string
-	Post    model.EmployeeRole
+	Role    model.EmployeeRole
 }
 
 func (eu *EmployeeUseCase) CreateEmployee(req CreateEmployeeReq) (*model.Employee, error) {
-	now := time.Now()
-	employee := model.NewEmployee(req.Name, req.Surname, req.Phone, req.Email, req.Post, now)
-	employee, err := eu.er.CreateEmployee(employee)
+	employee := model.NewEmployee(req.Name, req.Surname, req.Phone, req.Email, req.Role, time.Now())
+	employee, err := eu.employeeRepo.CreateEmployee(employee)
 	if err != nil {
-		return nil, fmt.Errorf("CreateEmployeeUC err: %w", err)
+		return nil, fmt.Errorf("employeeRepo.CreateEmployee: %w", err)
 	}
+
 	return employee, nil
 }
