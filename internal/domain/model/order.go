@@ -20,15 +20,18 @@ const (
 
 type Order struct {
 	ID        int
-	Positions *Position
+	Positions []Position
 	Status    OrderStatus
-	DevType   DeliveryType
+	DelType   DeliveryType
 	CreatedAt time.Time
-	UpdatedAt time.Time
+	UpdatedAt *time.Time
 }
 
-func NewOrder(positions *Position) *Order {
+func NewOrder(positions []Position, status OrderStatus, delType DeliveryType, now time.Time) *Order {
 	return &Order{
 		Positions: positions,
+		Status:    status,
+		DelType:   delType,
+		CreatedAt: now,
 	}
 }

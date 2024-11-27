@@ -4,7 +4,7 @@ import "warehouse_project/internal/domain/model"
 
 func (r *PositionRepo) CreatePosition(position *model.Position) (*model.Position, error) {
 	position.ID = r.nextID
-	r.positions[position.ID] = position
+	r.positionsMap[position.ID] = position
 	r.nextID++
 	return position, nil
 }

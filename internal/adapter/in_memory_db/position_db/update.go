@@ -6,9 +6,9 @@ import (
 )
 
 func (r *PositionRepo) UpdatePosition(position *model.Position) error {
-	if _, exists := r.positions[position.ID]; !exists {
+	if _, exists := r.positionsMap[position.ID]; !exists {
 		return fmt.Errorf("position does not exist")
 	}
-	r.positions[position.ID] = position
+	r.positionsMap[position.ID] = position
 	return nil
 }

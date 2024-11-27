@@ -18,7 +18,7 @@ func main() {
 
 	employeeUseCase := employee_usecase.NewEmployeeUseCase(employeeRepo)
 	positionUseCase := position_usecase.NewPositionUseCase(positionRepo)
-	orderUseCase := order_usecase.NewOrderUseCase(orderRepo)
+	orderUseCase := order_usecase.NewOrderUseCase(orderRepo, positionRepo)
 
 	createEmployee, err := employeeUseCase.CreateEmployeeUC(employee_usecase.CreateEmployeeReq{
 		Name:    "Denis",
@@ -31,18 +31,26 @@ func main() {
 		fmt.Println(err)
 	}
 
-	position, err := positionUseCase.CreatePositionUC(position_usecase.CreatePositionReq{
+	createPosition, err := positionUseCase.CreatePositionUC(position_usecase.CreatePositionReq{
 		Name:    "Электрический снегоуборщик Gigant SP-2300-460ES",
-		Barcode: "123456789",
+		Barcode: "10001",
 		Price:   15349,
 		PosType: model.BasicProduct,
 	})
 
-	order, _ := orderUseCase.CreateOrderUC(
-		position)
+	positionRepo.CreatePosition(&model.Position{
+		Name:    "Светодиодная гирлянда TDM Шишки, 50 LED, 5м, 8 режимов, многоцветная, 250 В SQ0361-0050",
+		Barcode: "10002",
+		Price:   557,
+		PosType: model.BasicConsumable})
+
+	order, err := orderUseCase.AddPositions([]int{1})
+	if err != nil {
+		fmt.Println(err)
+	}
 
 	fmt.Println(createEmployee)
-	fmt.Println(position)
+	fmt.Println(createPosition)
 	fmt.Println(order)
 
 }

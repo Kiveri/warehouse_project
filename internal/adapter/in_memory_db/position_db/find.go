@@ -6,7 +6,7 @@ import (
 )
 
 func (r *PositionRepo) FindPosition(id int) (*model.Position, error) {
-	position, exists := r.positions[id]
+	position, exists := r.positionsMap[id]
 	if !exists {
 		return nil, fmt.Errorf("position not found")
 	}
