@@ -18,20 +18,20 @@ func main() {
 
 	employeeUseCase := employee_usecase.NewEmployeeUseCase(employeeRepo)
 	positionUseCase := position_usecase.NewPositionUseCase(positionRepo)
-	orderUseCase := order_usecase.NewOrderUseCase(orderRepo, positionRepo)
+	orderUseCase := order_usecase.NewOrderUseCase(orderRepo, positionRepo, employeeRepo)
 
-	createEmployee, err := employeeUseCase.CreateEmployee(employee_usecase.CreateEmployeeReq{
+	createEmployee1, err := employeeUseCase.CreateEmployee(employee_usecase.CreateEmployeeReq{
 		Name:    "Denis",
 		Surname: "Popov",
 		Phone:   "79995398037",
 		Email:   "denpopov.m@gmail.com",
-		Post:    model.Leader,
+		Role:    model.Manager,
 	})
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	Position1, err := positionUseCase.CreatePosition(position_usecase.CreatePositionReq{
+	createPosition1, err := positionUseCase.CreatePosition(position_usecase.CreatePositionReq{
 		Name:    "Электрический снегоуборщик Gigant SP-2300-460ES",
 		Barcode: "10001",
 		Price:   15349,
@@ -41,7 +41,7 @@ func main() {
 		fmt.Println(err)
 	}
 
-	Position2, err := positionUseCase.CreatePosition(position_usecase.CreatePositionReq{
+	createPosition2, err := positionUseCase.CreatePosition(position_usecase.CreatePositionReq{
 		Name:    "Светодиодная гирлянда TDM Шишки, 50 LED, 5м, 8 режимов, многоцветная, 250 В SQ0361-0050",
 		Barcode: "10002",
 		Price:   557,
@@ -51,7 +51,7 @@ func main() {
 		fmt.Println(err)
 	}
 
-	Position3, err := positionUseCase.CreatePosition(position_usecase.CreatePositionReq{
+	createPosition3, err := positionUseCase.CreatePosition(position_usecase.CreatePositionReq{
 		Name:    "Промывка двигателя LAVR 5-минутная классическая, 345 мл Ln1003N",
 		Barcode: "10003",
 		Price:   297,
@@ -62,12 +62,17 @@ func main() {
 	}
 
 	orderReq := order_usecase.CreateOrderReq{
-		PositionsId: []int{Position1.ID, Position2.ID},
+		EmployeeID:   createEmployee1.ID,
+		PositionsIDs: []int64{createPosition1.ID, createPosition2.ID},
+		DeliveryType: model.CourierDelivery,
 	}
-	order := orderUseCase.CreateOrder(orderReq)
 
-	fmt.Println(createEmployee)
-	fmt.Println(Position1, Position2, Position3)
-	fmt.Println(order)
+	createOrder1, err := orderUseCase.CreateOrder(orderReq)
+	if err != nil {
+		fmt.Println(err)
+	}
 
+	fmt.Println(createEmployee1)
+	fmt.Println(createPosition1, createPosition2, createPosition3)
+	fmt.Println(createOrder1)
 }
