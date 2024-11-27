@@ -13,7 +13,7 @@ type CreatePositionReq struct {
 	PosType model.PositionType
 }
 
-func (u *PositionUseCase) CreatePositionUC(req CreatePositionReq) (*model.Position, error) {
+func (u *PositionUseCase) CreatePosition(req CreatePositionReq) (*model.Position, error) {
 	now := time.Now()
 	position := model.NewPosition(req.Name, req.Barcode, req.Price, req.PosType, now)
 	position, err := u.r.CreatePosition(position)
