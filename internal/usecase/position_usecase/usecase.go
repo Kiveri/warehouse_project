@@ -1,12 +1,19 @@
 package position_usecase
 
-import "warehouse_project/internal/adapter/in_memory_db/position_db"
+import (
+	"warehouse_project/internal/domain/model"
+)
 
-type PositionUseCase struct {
-	positionRepo *position_db.PositionRepo
+type positionRepo interface {
+	CreatePosition(position *model.Position) (*model.Position, error)
+	DeletePosition(id int64) error
 }
 
-func NewPositionUseCase(positionRepo *position_db.PositionRepo) *PositionUseCase {
+type PositionUseCase struct {
+	positionRepo positionRepo
+}
+
+func NewPositionUseCase(positionRepo positionRepo) *PositionUseCase {
 	return &PositionUseCase{
 		positionRepo: positionRepo,
 	}

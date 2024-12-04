@@ -1,18 +1,28 @@
 package order_usecase
 
 import (
-	"warehouse_project/internal/adapter/in_memory_db/employee_db"
-	"warehouse_project/internal/adapter/in_memory_db/order_db"
-	"warehouse_project/internal/adapter/in_memory_db/position_db"
+	"warehouse_project/internal/domain/model"
+)
+
+type (
+	orderRepo interface {
+		CreateOrder(order *model.Order) (*model.Order, error)
+	}
+	positionRepo interface {
+		FindAllByIDs(id []int64) ([]*model.Position, error)
+	}
+	employeeRepo interface {
+		FindEmployee(id int64) (*model.Employee, error)
+	}
 )
 
 type OrderUseCase struct {
-	positionRepo *position_db.PositionRepo
-	orderRepo    *order_db.OrderRepo
-	employeeRepo *employee_db.EmployeeRepo
+	positionRepo positionRepo
+	orderRepo    orderRepo
+	employeeRepo employeeRepo
 }
 
-func NewOrderUseCase(orderRepo *order_db.OrderRepo, positionRepo *position_db.PositionRepo, employeeRepo *employee_db.EmployeeRepo) *OrderUseCase {
+func NewOrderUseCase(orderRepo orderRepo, positionRepo positionRepo, employeeRepo employeeRepo) *OrderUseCase {
 	return &OrderUseCase{
 		positionRepo: positionRepo,
 		orderRepo:    orderRepo,

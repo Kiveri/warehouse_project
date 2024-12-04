@@ -31,7 +31,10 @@ func (ou *OrderUseCase) CreateOrder(req CreateOrderReq) (*model.Order, error) {
 	}
 
 	order := model.NewOrder(positions, employee.ID, req.DeliveryType, time.Now())
-	order = ou.orderRepo.CreateOrder(order)
+	order, err = ou.orderRepo.CreateOrder(order)
+	if err != nil {
+		return nil, fmt.Errorf("orderRepo.CreateOrder: %w", err)
+	}
 
 	return order, nil
 }
