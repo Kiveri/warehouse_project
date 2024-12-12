@@ -6,6 +6,7 @@ import (
 	"warehouse_project/internal/adapter/in_memory_db/order_db"
 	"warehouse_project/internal/adapter/in_memory_db/position_db"
 	"warehouse_project/internal/domain/model"
+	"warehouse_project/internal/pkg/timer"
 	"warehouse_project/internal/usecase/employee_usecase"
 	"warehouse_project/internal/usecase/order_usecase"
 	"warehouse_project/internal/usecase/position_usecase"
@@ -16,9 +17,9 @@ func main() {
 	positionRepo := position_db.NewPositionRepo()
 	orderRepo := order_db.NewOrderRepo()
 
-	employeeUseCase := employee_usecase.NewEmployeeUseCase(employeeRepo)
-	positionUseCase := position_usecase.NewPositionUseCase(positionRepo)
-	orderUseCase := order_usecase.NewOrderUseCase(orderRepo, positionRepo, employeeRepo)
+	employeeUseCase := employee_usecase.NewEmployeeUseCase(employeeRepo, timer.NewTimer())
+	positionUseCase := position_usecase.NewPositionUseCase(positionRepo, timer.NewTimer())
+	orderUseCase := order_usecase.NewOrderUseCase(orderRepo, positionRepo, employeeRepo, timer.NewTimer())
 
 	createEmployee1, err := employeeUseCase.CreateEmployee(employee_usecase.CreateEmployeeReq{
 		Name:    "Denis",
