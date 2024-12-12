@@ -1,0 +1,14 @@
+exported: True
+with-expecter: True
+disable-version-string: True
+quiet: False
+keeptree: False
+mockname: "{{.InterfaceName | camelcase| firstUpper}}"
+outpkg: mocks
+filename: "{{.InterfaceName | snakecase}}.go"
+dir: "{{.InterfaceDir}}/mocks"
+packages:
+  warehouse_project/internal/usecase/position_usecase:
+    config:
+      include-regex: ".*"
+      recursive: True

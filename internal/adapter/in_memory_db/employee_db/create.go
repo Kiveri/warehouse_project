@@ -7,5 +7,4 @@ func (er *EmployeeRepo) CreateEmployee(employee *model.Employee) (*model.Employe
 	er.employees[employee.ID] = employee
 
 	return employee, nil
-
 }

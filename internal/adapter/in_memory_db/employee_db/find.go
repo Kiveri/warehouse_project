@@ -8,7 +8,8 @@ import (
 func (er *EmployeeRepo) FindEmployee(id int64) (*model.Employee, error) {
 	employee, exists := er.employees[id]
 	if !exists {
-		return nil, fmt.Errorf("Employee not found")
+		return nil, fmt.Errorf("employee not found")
 	}
+
 	return employee, nil
 }

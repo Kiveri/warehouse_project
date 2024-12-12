@@ -10,5 +10,6 @@ func (er *EmployeeRepo) UpdateEmployee(employee *model.Employee) error {
 		return fmt.Errorf("employee with id %v does not exist", employee.ID)
 	}
 	er.employees[employee.ID] = employee
+
 	return nil
 }
