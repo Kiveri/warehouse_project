@@ -21,7 +21,7 @@ func (_m *Timer) EXPECT() *Timer_Expecter {
 	return &Timer_Expecter{mock: &_m.Mock}
 }
 
-// Now provides a mock function with no fields
+// Now provides a mock function with given fields:
 func (_m *Timer) Now() time.Time {
 	ret := _m.Called()
 

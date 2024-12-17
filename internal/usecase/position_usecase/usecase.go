@@ -10,15 +10,14 @@ type PositionUseCase struct {
 	timer        timer
 }
 
-type (
-	positionRepo interface {
-		CreatePosition(position *model.Position) (*model.Position, error)
-		DeletePosition(id int64) error
-	}
-	timer interface {
-		Now() time.Time
-	}
-)
+type positionRepo interface {
+	CreatePosition(position *model.Position) (*model.Position, error)
+	DeletePosition(id int64) error
+}
+
+type timer interface {
+	Now() time.Time
+}
 
 func NewPositionUseCase(positionRepo positionRepo, timer timer) *PositionUseCase {
 	return &PositionUseCase{
