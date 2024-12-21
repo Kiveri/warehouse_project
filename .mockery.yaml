@@ -42,9 +42,9 @@ dir: "{{.InterfaceDir}}/mocks"
 #относительно директории интерфейса.
 
 packages:
-  #Содержит список пакетов, для которых нужно генерировать моки.
+#Содержит список пакетов, для которых нужно генерировать моки.
 
-  warehouse_project/internal/usecase/employee_usecase:
+  warehouse_project/internal/usecase:
 
     config:
       #настраивает генерацию моков для данного пакета.
@@ -55,13 +55,3 @@ packages:
 
       recursive: True
       #Eсли в подкаталогах есть интерфейсы, их тоже нужно обрабатывать (рекурсивно).
-
-  warehouse_project/internal/usecase/order_usecase:
-    config:
-      include-regex: ".*"
-      recursive: True
-
-  warehouse_project/internal/usecase/position_usecase:
-    config:
-      include-regex: ".*"
-      recursive: True
