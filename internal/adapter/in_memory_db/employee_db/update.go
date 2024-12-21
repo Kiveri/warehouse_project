@@ -6,10 +6,10 @@ import (
 )
 
 func (er *EmployeeRepo) UpdateEmployee(employee *model.Employee) error {
-	if _, exists := er.employees[employee.ID]; !exists {
+	if _, exists := er.employeesMap[employee.ID]; !exists {
 		return fmt.Errorf("employee with id %v does not exist", employee.ID)
 	}
-	er.employees[employee.ID] = employee
+	er.employeesMap[employee.ID] = employee
 
 	return nil
 }

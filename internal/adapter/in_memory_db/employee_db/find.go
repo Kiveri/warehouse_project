@@ -6,7 +6,7 @@ import (
 )
 
 func (er *EmployeeRepo) FindEmployee(id int64) (*model.Employee, error) {
-	employee, exists := er.employees[id]
+	employee, exists := er.employeesMap[id]
 	if !exists {
 		return nil, fmt.Errorf("employee not found")
 	}

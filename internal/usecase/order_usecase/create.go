@@ -12,6 +12,7 @@ type CreateOrderReq struct {
 	EmployeeID   int64
 	PositionsIDs []int64
 	DeliveryType model.DeliveryType
+	ClientID     int64
 }
 
 func (ou *OrderUseCase) CreateOrder(req CreateOrderReq) (*model.Order, error) {
@@ -25,12 +26,17 @@ func (ou *OrderUseCase) CreateOrder(req CreateOrderReq) (*model.Order, error) {
 		return nil, EmployeeHasNoAccessToCreateOrder
 	}
 
+	client, err := ou.clientRepo.FindClient(req.ClientID)
+	if err != nil {
+		return nil, fmt.Errorf("ou.ClientRepo.FindClient: %w", err)
+	}
+
 	positions, err := ou.positionRepo.FindAllByIDs(req.PositionsIDs)
 	if err != nil {
 		return nil, fmt.Errorf("positionRepo.FindAllByIDs: %w", err)
 	}
 
-	order := model.NewOrder(positions, employee.ID, req.DeliveryType, now)
+	order := model.NewOrder(positions, employee.ID, client.ID, req.DeliveryType, now)
 	order, err = ou.orderRepo.CreateOrder(order)
 	if err != nil {
 		return nil, fmt.Errorf("orderRepo.CreateOrder: %w", err)
