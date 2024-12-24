@@ -44,20 +44,12 @@ dir: "{{.InterfaceDir}}/mocks"
 packages:
 #Содержит список пакетов, для которых нужно генерировать моки.
 
-  warehouse_project/internal/usecase/order_usecase:
+  warehouse_project/internal/usecase:
     #Настраивает генерацию моков для данного пакета.
 
     config:
-      include-regex: "^orderRepo$"
+      include-regex: ".*"
       #Генерация для выбранного интерфейса
 
       recursive: True
       #Поиск в подкаталогах
-
-  warehouse_project/internal/usecase:
-    config:
-      exclude-regex: "^timer$"
-      #Исключение для выбранного интерфейса
-
-      include-regex: ".*"
-      recursive: True
