@@ -22,3 +22,8 @@ func NewClient(name, phone, email, homeAddress string, now time.Time) *Client {
 		UpdatedAt:   now,
 	}
 }
+
+func (c *Client) ChangeAddress(newAddress string) {
+	c.HomeAddress = newAddress
+	c.UpdatedAt = time.Now()
+}

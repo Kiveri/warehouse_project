@@ -32,3 +32,8 @@ func NewPosition(name, barcode string, price float32, posType PositionType, now 
 		UpdatedAt: now,
 	}
 }
+
+func (p *Position) ChangePrice(newPrice float32) {
+	p.Price = newPrice
+	p.UpdatedAt = time.Now()
+}

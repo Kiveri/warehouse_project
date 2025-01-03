@@ -125,6 +125,110 @@ func (_c *PositionRepo_DeletePosition_Call) RunAndReturn(run func(int64) error) 
 	return _c
 }
 
+// FindPosition provides a mock function with given fields: id
+func (_m *PositionRepo) FindPosition(id int64) (*model.Position, error) {
+	ret := _m.Called(id)
+
+	if len(ret) == 0 {
+		panic("no return value specified for FindPosition")
+	}
+
+	var r0 *model.Position
+	var r1 error
+	if rf, ok := ret.Get(0).(func(int64) (*model.Position, error)); ok {
+		return rf(id)
+	}
+	if rf, ok := ret.Get(0).(func(int64) *model.Position); ok {
+		r0 = rf(id)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*model.Position)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(int64) error); ok {
+		r1 = rf(id)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// PositionRepo_FindPosition_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'FindPosition'
+type PositionRepo_FindPosition_Call struct {
+	*mock.Call
+}
+
+// FindPosition is a helper method to define mock.On call
+//   - id int64
+func (_e *PositionRepo_Expecter) FindPosition(id interface{}) *PositionRepo_FindPosition_Call {
+	return &PositionRepo_FindPosition_Call{Call: _e.mock.On("FindPosition", id)}
+}
+
+func (_c *PositionRepo_FindPosition_Call) Run(run func(id int64)) *PositionRepo_FindPosition_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(int64))
+	})
+	return _c
+}
+
+func (_c *PositionRepo_FindPosition_Call) Return(_a0 *model.Position, _a1 error) *PositionRepo_FindPosition_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
+}
+
+func (_c *PositionRepo_FindPosition_Call) RunAndReturn(run func(int64) (*model.Position, error)) *PositionRepo_FindPosition_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// UpdatePosition provides a mock function with given fields: position
+func (_m *PositionRepo) UpdatePosition(position *model.Position) error {
+	ret := _m.Called(position)
+
+	if len(ret) == 0 {
+		panic("no return value specified for UpdatePosition")
+	}
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(*model.Position) error); ok {
+		r0 = rf(position)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// PositionRepo_UpdatePosition_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpdatePosition'
+type PositionRepo_UpdatePosition_Call struct {
+	*mock.Call
+}
+
+// UpdatePosition is a helper method to define mock.On call
+//   - position *model.Position
+func (_e *PositionRepo_Expecter) UpdatePosition(position interface{}) *PositionRepo_UpdatePosition_Call {
+	return &PositionRepo_UpdatePosition_Call{Call: _e.mock.On("UpdatePosition", position)}
+}
+
+func (_c *PositionRepo_UpdatePosition_Call) Run(run func(position *model.Position)) *PositionRepo_UpdatePosition_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(*model.Position))
+	})
+	return _c
+}
+
+func (_c *PositionRepo_UpdatePosition_Call) Return(_a0 error) *PositionRepo_UpdatePosition_Call {
+	_c.Call.Return(_a0)
+	return _c
+}
+
+func (_c *PositionRepo_UpdatePosition_Call) RunAndReturn(run func(*model.Position) error) *PositionRepo_UpdatePosition_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // NewPositionRepo creates a new instance of PositionRepo. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.
 // The first argument is typically a *testing.T value.
 func NewPositionRepo(t interface {

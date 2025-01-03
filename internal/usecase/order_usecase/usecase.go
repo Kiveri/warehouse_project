@@ -5,9 +5,20 @@ import (
 	"warehouse_project/internal/domain/model"
 )
 
+type OrderUseCase struct {
+	positionRepo positionRepo
+	orderRepo    orderRepo
+	employeeRepo employeeRepo
+	clientRepo   clientRepo
+	timer        timer
+}
+
 type (
 	orderRepo interface {
 		CreateOrder(order *model.Order) (*model.Order, error)
+		FindOrder(id int64) (*model.Order, error)
+		UpdateOrder(order *model.Order) error
+		DeleteOrder(id int64) error
 	}
 	positionRepo interface {
 		FindAllByIDs(id []int64) ([]*model.Position, error)
@@ -22,14 +33,6 @@ type (
 		Now() time.Time
 	}
 )
-
-type OrderUseCase struct {
-	positionRepo positionRepo
-	orderRepo    orderRepo
-	employeeRepo employeeRepo
-	clientRepo   clientRepo
-	timer        timer
-}
 
 func NewOrderUseCase(orderRepo orderRepo, positionRepo positionRepo, employeeRepo employeeRepo, clientRepo clientRepo, timer timer) *OrderUseCase {
 	return &OrderUseCase{

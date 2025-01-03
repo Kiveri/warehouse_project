@@ -27,7 +27,7 @@ type Order struct {
 	DelType   DeliveryType
 	Total     float32
 	CreatedAt time.Time
-	UpdatedAt *time.Time
+	UpdatedAt time.Time
 }
 
 func NewOrder(positions []*Position, createdBy, client int64, delType DeliveryType, now time.Time) *Order {
@@ -45,4 +45,9 @@ func NewOrder(positions []*Position, createdBy, client int64, delType DeliveryTy
 		Total:     total,
 		CreatedAt: now,
 	}
+}
+
+func (o *Order) ChangeStatus(newStatus OrderStatus) {
+	o.Status = newStatus
+	o.UpdatedAt = time.Now()
 }

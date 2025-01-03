@@ -10,7 +10,6 @@ type CreateClientReq struct {
 	Phone       string
 	Email       string
 	HomeAddress string
-	OrdersIDs   []int64
 }
 
 func (cu *ClientUseCase) CreateClient(req CreateClientReq) (*model.Client, error) {

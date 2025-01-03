@@ -6,7 +6,7 @@ import (
 
 func (pr *PositionRepo) DeletePosition(id int64) error {
 	if _, exists := pr.positionsMap[id]; !exists {
-		return fmt.Errorf("position does not exist")
+		return fmt.Errorf("position with id %d does not found", id)
 	}
 	delete(pr.positionsMap, id)
 

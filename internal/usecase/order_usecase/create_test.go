@@ -1,6 +1,7 @@
 package order_usecase
 
 import (
+	"errors"
 	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
@@ -12,7 +13,7 @@ func TestCreateUseCase(t *testing.T) {
 	t.Parallel()
 
 	now := time.Now()
-	// errTest := errors.New("test error")
+	errTest := errors.New("test error")
 
 	type fields struct {
 		orderRepo    *mocks.OrderRepo
@@ -29,6 +30,11 @@ func TestCreateUseCase(t *testing.T) {
 	employee := &model.Employee{
 		ID:   1,
 		Role: model.Manager,
+	}
+
+	employeeWithoutAccess := &model.Employee{
+		ID:   2,
+		Role: model.Specialist,
 	}
 
 	client := &model.Client{
@@ -82,6 +88,42 @@ func TestCreateUseCase(t *testing.T) {
 				f.positionRepo.EXPECT().FindAllByIDs(args.req.PositionsIDs).Return(positions, nil)
 				order := model.NewOrder(positions, employee.ID, client.ID, args.req.DeliveryType, now)
 				f.orderRepo.EXPECT().CreateOrder(order).Return(order, nil)
+			},
+		},
+		{
+			name: "error on create",
+			args: args{
+				req: CreateOrderReq{
+					EmployeeID:   1,
+					PositionsIDs: []int64{2},
+					DeliveryType: model.CourierDelivery,
+					ClientID:     1,
+				},
+			},
+			wantErr: errTest,
+			before: func(f fields, args args) {
+				f.timer.EXPECT().Now().Return(now)
+				f.employeeRepo.EXPECT().FindEmployee(args.req.EmployeeID).Return(employee, nil)
+				f.clientRepo.EXPECT().FindClient(args.req.ClientID).Return(client, nil)
+				f.positionRepo.EXPECT().FindAllByIDs(args.req.PositionsIDs).Return(positions, nil)
+				order := model.NewOrder(positions, employee.ID, client.ID, args.req.DeliveryType, now)
+				f.orderRepo.EXPECT().CreateOrder(order).Return(nil, errTest)
+			},
+		},
+		{
+			name: "error no access",
+			args: args{
+				req: CreateOrderReq{
+					EmployeeID:   2,
+					PositionsIDs: []int64{2},
+					DeliveryType: model.CourierDelivery,
+					ClientID:     1,
+				},
+			},
+			wantErr: EmployeeHasNoAccessToCreateOrder,
+			before: func(f fields, args args) {
+				f.timer.EXPECT().Now().Return(now)
+				f.employeeRepo.EXPECT().FindEmployee(args.req.EmployeeID).Return(employeeWithoutAccess, nil)
 			},
 		},
 	}

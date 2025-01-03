@@ -5,12 +5,12 @@ import (
 	"warehouse_project/internal/domain/model"
 )
 
-type UpdateEmployeeRequest struct {
+type UpdateEmployeeReq struct {
 	ID   int64
 	Role model.EmployeeRole
 }
 
-func (eu *EmployeeUseCase) UpdateEmployee(req UpdateEmployeeRequest) error {
+func (eu *EmployeeUseCase) UpdateEmployee(req UpdateEmployeeReq) error {
 	employee, err := eu.employeeRepo.FindEmployee(req.ID)
 	if err != nil {
 		return fmt.Errorf("employeeRepo.FindEmployee: %w", err)

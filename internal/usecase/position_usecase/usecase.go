@@ -13,6 +13,8 @@ type PositionUseCase struct {
 type positionRepo interface {
 	CreatePosition(position *model.Position) (*model.Position, error)
 	DeletePosition(id int64) error
+	UpdatePosition(position *model.Position) error
+	FindPosition(id int64) (*model.Position, error)
 }
 
 type timer interface {

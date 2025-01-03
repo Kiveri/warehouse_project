@@ -79,6 +79,156 @@ func (_c *OrderRepo_CreateOrder_Call) RunAndReturn(run func(*model.Order) (*mode
 	return _c
 }
 
+// DeleteOrder provides a mock function with given fields: id
+func (_m *OrderRepo) DeleteOrder(id int64) error {
+	ret := _m.Called(id)
+
+	if len(ret) == 0 {
+		panic("no return value specified for DeleteOrder")
+	}
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(int64) error); ok {
+		r0 = rf(id)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// OrderRepo_DeleteOrder_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'DeleteOrder'
+type OrderRepo_DeleteOrder_Call struct {
+	*mock.Call
+}
+
+// DeleteOrder is a helper method to define mock.On call
+//   - id int64
+func (_e *OrderRepo_Expecter) DeleteOrder(id interface{}) *OrderRepo_DeleteOrder_Call {
+	return &OrderRepo_DeleteOrder_Call{Call: _e.mock.On("DeleteOrder", id)}
+}
+
+func (_c *OrderRepo_DeleteOrder_Call) Run(run func(id int64)) *OrderRepo_DeleteOrder_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(int64))
+	})
+	return _c
+}
+
+func (_c *OrderRepo_DeleteOrder_Call) Return(_a0 error) *OrderRepo_DeleteOrder_Call {
+	_c.Call.Return(_a0)
+	return _c
+}
+
+func (_c *OrderRepo_DeleteOrder_Call) RunAndReturn(run func(int64) error) *OrderRepo_DeleteOrder_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// FindOrder provides a mock function with given fields: id
+func (_m *OrderRepo) FindOrder(id int64) (*model.Order, error) {
+	ret := _m.Called(id)
+
+	if len(ret) == 0 {
+		panic("no return value specified for FindOrder")
+	}
+
+	var r0 *model.Order
+	var r1 error
+	if rf, ok := ret.Get(0).(func(int64) (*model.Order, error)); ok {
+		return rf(id)
+	}
+	if rf, ok := ret.Get(0).(func(int64) *model.Order); ok {
+		r0 = rf(id)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*model.Order)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(int64) error); ok {
+		r1 = rf(id)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// OrderRepo_FindOrder_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'FindOrder'
+type OrderRepo_FindOrder_Call struct {
+	*mock.Call
+}
+
+// FindOrder is a helper method to define mock.On call
+//   - id int64
+func (_e *OrderRepo_Expecter) FindOrder(id interface{}) *OrderRepo_FindOrder_Call {
+	return &OrderRepo_FindOrder_Call{Call: _e.mock.On("FindOrder", id)}
+}
+
+func (_c *OrderRepo_FindOrder_Call) Run(run func(id int64)) *OrderRepo_FindOrder_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(int64))
+	})
+	return _c
+}
+
+func (_c *OrderRepo_FindOrder_Call) Return(_a0 *model.Order, _a1 error) *OrderRepo_FindOrder_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
+}
+
+func (_c *OrderRepo_FindOrder_Call) RunAndReturn(run func(int64) (*model.Order, error)) *OrderRepo_FindOrder_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// UpdateOrder provides a mock function with given fields: order
+func (_m *OrderRepo) UpdateOrder(order *model.Order) error {
+	ret := _m.Called(order)
+
+	if len(ret) == 0 {
+		panic("no return value specified for UpdateOrder")
+	}
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(*model.Order) error); ok {
+		r0 = rf(order)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// OrderRepo_UpdateOrder_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpdateOrder'
+type OrderRepo_UpdateOrder_Call struct {
+	*mock.Call
+}
+
+// UpdateOrder is a helper method to define mock.On call
+//   - order *model.Order
+func (_e *OrderRepo_Expecter) UpdateOrder(order interface{}) *OrderRepo_UpdateOrder_Call {
+	return &OrderRepo_UpdateOrder_Call{Call: _e.mock.On("UpdateOrder", order)}
+}
+
+func (_c *OrderRepo_UpdateOrder_Call) Run(run func(order *model.Order)) *OrderRepo_UpdateOrder_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(*model.Order))
+	})
+	return _c
+}
+
+func (_c *OrderRepo_UpdateOrder_Call) Return(_a0 error) *OrderRepo_UpdateOrder_Call {
+	_c.Call.Return(_a0)
+	return _c
+}
+
+func (_c *OrderRepo_UpdateOrder_Call) RunAndReturn(run func(*model.Order) error) *OrderRepo_UpdateOrder_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // NewOrderRepo creates a new instance of OrderRepo. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.
 // The first argument is typically a *testing.T value.
 func NewOrderRepo(t interface {

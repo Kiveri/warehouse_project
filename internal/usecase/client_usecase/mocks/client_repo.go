@@ -79,6 +79,156 @@ func (_c *ClientRepo_CreateClient_Call) RunAndReturn(run func(*model.Client) (*m
 	return _c
 }
 
+// DeleteClient provides a mock function with given fields: id
+func (_m *ClientRepo) DeleteClient(id int64) error {
+	ret := _m.Called(id)
+
+	if len(ret) == 0 {
+		panic("no return value specified for DeleteClient")
+	}
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(int64) error); ok {
+		r0 = rf(id)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// ClientRepo_DeleteClient_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'DeleteClient'
+type ClientRepo_DeleteClient_Call struct {
+	*mock.Call
+}
+
+// DeleteClient is a helper method to define mock.On call
+//   - id int64
+func (_e *ClientRepo_Expecter) DeleteClient(id interface{}) *ClientRepo_DeleteClient_Call {
+	return &ClientRepo_DeleteClient_Call{Call: _e.mock.On("DeleteClient", id)}
+}
+
+func (_c *ClientRepo_DeleteClient_Call) Run(run func(id int64)) *ClientRepo_DeleteClient_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(int64))
+	})
+	return _c
+}
+
+func (_c *ClientRepo_DeleteClient_Call) Return(_a0 error) *ClientRepo_DeleteClient_Call {
+	_c.Call.Return(_a0)
+	return _c
+}
+
+func (_c *ClientRepo_DeleteClient_Call) RunAndReturn(run func(int64) error) *ClientRepo_DeleteClient_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// FindClient provides a mock function with given fields: id
+func (_m *ClientRepo) FindClient(id int64) (*model.Client, error) {
+	ret := _m.Called(id)
+
+	if len(ret) == 0 {
+		panic("no return value specified for FindClient")
+	}
+
+	var r0 *model.Client
+	var r1 error
+	if rf, ok := ret.Get(0).(func(int64) (*model.Client, error)); ok {
+		return rf(id)
+	}
+	if rf, ok := ret.Get(0).(func(int64) *model.Client); ok {
+		r0 = rf(id)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*model.Client)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(int64) error); ok {
+		r1 = rf(id)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// ClientRepo_FindClient_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'FindClient'
+type ClientRepo_FindClient_Call struct {
+	*mock.Call
+}
+
+// FindClient is a helper method to define mock.On call
+//   - id int64
+func (_e *ClientRepo_Expecter) FindClient(id interface{}) *ClientRepo_FindClient_Call {
+	return &ClientRepo_FindClient_Call{Call: _e.mock.On("FindClient", id)}
+}
+
+func (_c *ClientRepo_FindClient_Call) Run(run func(id int64)) *ClientRepo_FindClient_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(int64))
+	})
+	return _c
+}
+
+func (_c *ClientRepo_FindClient_Call) Return(_a0 *model.Client, _a1 error) *ClientRepo_FindClient_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
+}
+
+func (_c *ClientRepo_FindClient_Call) RunAndReturn(run func(int64) (*model.Client, error)) *ClientRepo_FindClient_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// UpdateClient provides a mock function with given fields: client
+func (_m *ClientRepo) UpdateClient(client *model.Client) error {
+	ret := _m.Called(client)
+
+	if len(ret) == 0 {
+		panic("no return value specified for UpdateClient")
+	}
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(*model.Client) error); ok {
+		r0 = rf(client)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// ClientRepo_UpdateClient_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpdateClient'
+type ClientRepo_UpdateClient_Call struct {
+	*mock.Call
+}
+
+// UpdateClient is a helper method to define mock.On call
+//   - client *model.Client
+func (_e *ClientRepo_Expecter) UpdateClient(client interface{}) *ClientRepo_UpdateClient_Call {
+	return &ClientRepo_UpdateClient_Call{Call: _e.mock.On("UpdateClient", client)}
+}
+
+func (_c *ClientRepo_UpdateClient_Call) Run(run func(client *model.Client)) *ClientRepo_UpdateClient_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(*model.Client))
+	})
+	return _c
+}
+
+func (_c *ClientRepo_UpdateClient_Call) Return(_a0 error) *ClientRepo_UpdateClient_Call {
+	_c.Call.Return(_a0)
+	return _c
+}
+
+func (_c *ClientRepo_UpdateClient_Call) RunAndReturn(run func(*model.Client) error) *ClientRepo_UpdateClient_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // NewClientRepo creates a new instance of ClientRepo. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.
 // The first argument is typically a *testing.T value.
 func NewClientRepo(t interface {
