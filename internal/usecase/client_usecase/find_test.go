@@ -2,17 +2,18 @@ package client_usecase
 
 import (
 	"errors"
-	"github.com/stretchr/testify/assert"
 	"testing"
+
 	"warehouse_project/internal/domain/model"
 	"warehouse_project/internal/usecase/client_usecase/mocks"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestFindUseCase(t *testing.T) {
 	t.Parallel()
 
 	errTest := errors.New("test error")
-	errDb := errors.New("database error")
 
 	client := &model.Client{
 		ID:          1,
@@ -53,7 +54,7 @@ func TestFindUseCase(t *testing.T) {
 			},
 		},
 		{
-			name: "client not found",
+			name: "error on find",
 			args: args{
 				req: FindClientReq{
 					ID: 2,
@@ -62,18 +63,6 @@ func TestFindUseCase(t *testing.T) {
 			wantErr: true,
 			before: func(f fields, args args) {
 				f.clientRepo.EXPECT().FindClient(args.req.ID).Return(nil, errTest)
-			},
-		},
-		{
-			name: "db error",
-			args: args{
-				req: FindClientReq{
-					ID: 1,
-				},
-			},
-			wantErr: true,
-			before: func(f fields, args args) {
-				f.clientRepo.EXPECT().FindClient(args.req.ID).Return(nil, errDb)
 			},
 		},
 	}

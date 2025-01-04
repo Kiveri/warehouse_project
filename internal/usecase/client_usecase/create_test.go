@@ -2,11 +2,13 @@ package client_usecase
 
 import (
 	"errors"
-	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
+
 	"warehouse_project/internal/domain/model"
 	"warehouse_project/internal/usecase/client_usecase/mocks"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestCreateUseCase(t *testing.T) {

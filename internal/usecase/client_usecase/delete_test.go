@@ -2,9 +2,11 @@ package client_usecase
 
 import (
 	"errors"
-	"github.com/stretchr/testify/assert"
 	"testing"
+
 	"warehouse_project/internal/usecase/client_usecase/mocks"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestDeleteUseCase(t *testing.T) {
