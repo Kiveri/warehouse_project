@@ -23,7 +23,7 @@ func NewClient(name, phone, email, homeAddress string, now time.Time) *Client {
 	}
 }
 
-func (c *Client) ChangeAddress(newAddress string) {
+func (c *Client) ChangeAddress(newAddress string, now time.Time) {
 	c.HomeAddress = newAddress
-	c.UpdatedAt = time.Now()
+	c.UpdatedAt = now
 }
