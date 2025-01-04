@@ -1,64 +1,55 @@
-package client_usecase
+package employee_usecase
 
 import (
 	"errors"
 	"testing"
 
-	"warehouse_project/internal/domain/model"
-	"warehouse_project/internal/usecase/client_usecase/mocks"
+	"warehouse_project/internal/usecase/employee_usecase/mocks"
 
 	"github.com/stretchr/testify/assert"
 )
 
-func TestFindUseCase(t *testing.T) {
+func TestDeleteUseCase(t *testing.T) {
 	t.Parallel()
 
 	errTest := errors.New("test error")
 
-	client := &model.Client{
-		ID: 1,
-	}
-
 	type fields struct {
-		clientRepo *mocks.ClientRepo
-		timer      *mocks.Timer
+		employeeRepo *mocks.EmployeeRepo
+		timer        *mocks.Timer
 	}
 
 	type args struct {
-		req FindClientReq
+		req DeleteEmployeeReq
 	}
 
 	tests := []struct {
 		name    string
 		args    args
-		want    *model.Client
 		wantErr bool
 		before  func(f fields, args args)
 	}{
 		{
 			name: "success",
 			args: args{
-				req: FindClientReq{
+				req: DeleteEmployeeReq{
 					ID: 1,
 				},
 			},
-			want: &model.Client{
-				ID: 1,
-			},
 			before: func(f fields, args args) {
-				f.clientRepo.EXPECT().FindClient(args.req.ID).Return(client, nil)
+				f.employeeRepo.EXPECT().DeleteEmployee(args.req.ID).Return(nil)
 			},
 		},
 		{
 			name: "error on find",
 			args: args{
-				req: FindClientReq{
-					ID: 2,
+				req: DeleteEmployeeReq{
+					ID: 50,
 				},
 			},
 			wantErr: true,
 			before: func(f fields, args args) {
-				f.clientRepo.EXPECT().FindClient(args.req.ID).Return(nil, errTest)
+				f.employeeRepo.EXPECT().DeleteEmployee(args.req.ID).Return(errTest)
 			},
 		},
 	}
@@ -69,22 +60,22 @@ func TestFindUseCase(t *testing.T) {
 			a := assert.New(t)
 
 			f := fields{
-				clientRepo: mocks.NewClientRepo(t),
-				timer:      mocks.NewTimer(t),
+				employeeRepo: mocks.NewEmployeeRepo(t),
+				timer:        mocks.NewTimer(t),
 			}
 
 			tt.before(f, tt.args)
 
-			uc := NewClientUseCase(f.clientRepo, f.timer)
+			uc := NewEmployeeUseCase(f.employeeRepo, f.timer)
 
-			c, err := uc.FindClient(tt.args.req)
+			err := uc.DeleteEmployee(tt.args.req)
 
 			if tt.wantErr {
 				a.Error(err)
 				return
 			}
+
 			a.NoError(err)
-			a.Equal(tt.want, c)
 		})
 	}
 }

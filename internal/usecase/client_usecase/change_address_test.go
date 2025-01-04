@@ -86,7 +86,7 @@ func TestChangeAddressUseCase(t *testing.T) {
 			},
 		},
 		{
-			name: "error on find client",
+			name: "error on find",
 			args: args{
 				req: UpdateClientReq{
 					ID:          1,

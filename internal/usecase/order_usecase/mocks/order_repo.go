@@ -184,21 +184,33 @@ func (_c *OrderRepo_FindOrder_Call) RunAndReturn(run func(int64) (*model.Order, 
 }
 
 // UpdateOrder provides a mock function with given fields: order
-func (_m *OrderRepo) UpdateOrder(order *model.Order) error {
+func (_m *OrderRepo) UpdateOrder(order *model.Order) (*model.Order, error) {
 	ret := _m.Called(order)
 
 	if len(ret) == 0 {
 		panic("no return value specified for UpdateOrder")
 	}
 
-	var r0 error
-	if rf, ok := ret.Get(0).(func(*model.Order) error); ok {
+	var r0 *model.Order
+	var r1 error
+	if rf, ok := ret.Get(0).(func(*model.Order) (*model.Order, error)); ok {
+		return rf(order)
+	}
+	if rf, ok := ret.Get(0).(func(*model.Order) *model.Order); ok {
 		r0 = rf(order)
 	} else {
-		r0 = ret.Error(0)
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*model.Order)
+		}
 	}
 
-	return r0
+	if rf, ok := ret.Get(1).(func(*model.Order) error); ok {
+		r1 = rf(order)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
 }
 
 // OrderRepo_UpdateOrder_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpdateOrder'
@@ -219,12 +231,12 @@ func (_c *OrderRepo_UpdateOrder_Call) Run(run func(order *model.Order)) *OrderRe
 	return _c
 }
 
-func (_c *OrderRepo_UpdateOrder_Call) Return(_a0 error) *OrderRepo_UpdateOrder_Call {
-	_c.Call.Return(_a0)
+func (_c *OrderRepo_UpdateOrder_Call) Return(_a0 *model.Order, _a1 error) *OrderRepo_UpdateOrder_Call {
+	_c.Call.Return(_a0, _a1)
 	return _c
 }
 
-func (_c *OrderRepo_UpdateOrder_Call) RunAndReturn(run func(*model.Order) error) *OrderRepo_UpdateOrder_Call {
+func (_c *OrderRepo_UpdateOrder_Call) RunAndReturn(run func(*model.Order) (*model.Order, error)) *OrderRepo_UpdateOrder_Call {
 	_c.Call.Return(run)
 	return _c
 }

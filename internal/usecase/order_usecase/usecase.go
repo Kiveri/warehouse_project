@@ -2,6 +2,7 @@ package order_usecase
 
 import (
 	"time"
+
 	"warehouse_project/internal/domain/model"
 )
 
@@ -17,7 +18,7 @@ type (
 	orderRepo interface {
 		CreateOrder(order *model.Order) (*model.Order, error)
 		FindOrder(id int64) (*model.Order, error)
-		UpdateOrder(order *model.Order) error
+		UpdateOrder(order *model.Order) (*model.Order, error)
 		DeleteOrder(id int64) error
 	}
 	positionRepo interface {
@@ -36,8 +37,8 @@ type (
 
 func NewOrderUseCase(orderRepo orderRepo, positionRepo positionRepo, employeeRepo employeeRepo, clientRepo clientRepo, timer timer) *OrderUseCase {
 	return &OrderUseCase{
-		positionRepo: positionRepo,
 		orderRepo:    orderRepo,
+		positionRepo: positionRepo,
 		employeeRepo: employeeRepo,
 		clientRepo:   clientRepo,
 		timer:        timer,

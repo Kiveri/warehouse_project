@@ -2,6 +2,7 @@ package employee_usecase
 
 import (
 	"fmt"
+
 	"warehouse_project/internal/domain/model"
 )
 
@@ -10,17 +11,17 @@ type UpdateEmployeeReq struct {
 	Role model.EmployeeRole
 }
 
-func (eu *EmployeeUseCase) UpdateEmployee(req UpdateEmployeeReq) error {
+func (eu *EmployeeUseCase) UpdateEmployee(req UpdateEmployeeReq) (*model.Employee, error) {
 	employee, err := eu.employeeRepo.FindEmployee(req.ID)
 	if err != nil {
-		return fmt.Errorf("employeeRepo.FindEmployee: %w", err)
+		return nil, fmt.Errorf("employeeRepo.FindEmployee: %w", err)
 	}
 
-	employee.ChangeRole(req.Role)
+	employee.ChangeRole(req.Role, eu.timer.Now())
 
-	if err = eu.employeeRepo.UpdateEmployee(employee); err != nil {
-		return fmt.Errorf("employeeRepo.UpdateEmployee: %w", err)
+	if _, err = eu.employeeRepo.UpdateEmployee(employee); err != nil {
+		return nil, fmt.Errorf("employeeRepo.UpdateEmployee: %w", err)
 	}
 
-	return nil
+	return employee, nil
 }

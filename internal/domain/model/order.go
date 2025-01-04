@@ -47,7 +47,7 @@ func NewOrder(positions []*Position, createdBy, client int64, delType DeliveryTy
 	}
 }
 
-func (o *Order) ChangeStatus(newStatus OrderStatus) {
+func (o *Order) ChangeStatus(newStatus OrderStatus, now time.Time) {
 	o.Status = newStatus
-	o.UpdatedAt = time.Now()
+	o.UpdatedAt = now
 }

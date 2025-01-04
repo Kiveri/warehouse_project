@@ -184,21 +184,33 @@ func (_c *EmployeeRepo_FindEmployee_Call) RunAndReturn(run func(int64) (*model.E
 }
 
 // UpdateEmployee provides a mock function with given fields: employee
-func (_m *EmployeeRepo) UpdateEmployee(employee *model.Employee) error {
+func (_m *EmployeeRepo) UpdateEmployee(employee *model.Employee) (*model.Employee, error) {
 	ret := _m.Called(employee)
 
 	if len(ret) == 0 {
 		panic("no return value specified for UpdateEmployee")
 	}
 
-	var r0 error
-	if rf, ok := ret.Get(0).(func(*model.Employee) error); ok {
+	var r0 *model.Employee
+	var r1 error
+	if rf, ok := ret.Get(0).(func(*model.Employee) (*model.Employee, error)); ok {
+		return rf(employee)
+	}
+	if rf, ok := ret.Get(0).(func(*model.Employee) *model.Employee); ok {
 		r0 = rf(employee)
 	} else {
-		r0 = ret.Error(0)
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*model.Employee)
+		}
 	}
 
-	return r0
+	if rf, ok := ret.Get(1).(func(*model.Employee) error); ok {
+		r1 = rf(employee)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
 }
 
 // EmployeeRepo_UpdateEmployee_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpdateEmployee'
@@ -219,12 +231,12 @@ func (_c *EmployeeRepo_UpdateEmployee_Call) Run(run func(employee *model.Employe
 	return _c
 }
 
-func (_c *EmployeeRepo_UpdateEmployee_Call) Return(_a0 error) *EmployeeRepo_UpdateEmployee_Call {
-	_c.Call.Return(_a0)
+func (_c *EmployeeRepo_UpdateEmployee_Call) Return(_a0 *model.Employee, _a1 error) *EmployeeRepo_UpdateEmployee_Call {
+	_c.Call.Return(_a0, _a1)
 	return _c
 }
 
-func (_c *EmployeeRepo_UpdateEmployee_Call) RunAndReturn(run func(*model.Employee) error) *EmployeeRepo_UpdateEmployee_Call {
+func (_c *EmployeeRepo_UpdateEmployee_Call) RunAndReturn(run func(*model.Employee) (*model.Employee, error)) *EmployeeRepo_UpdateEmployee_Call {
 	_c.Call.Return(run)
 	return _c
 }

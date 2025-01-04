@@ -1,23 +1,27 @@
 package position_usecase
 
-import "fmt"
+import (
+	"fmt"
+
+	"warehouse_project/internal/domain/model"
+)
 
 type UpdatePositionReq struct {
 	ID    int64
 	Price float32
 }
 
-func (pu *PositionUseCase) UpdatePosition(req UpdatePositionReq) error {
+func (pu *PositionUseCase) UpdatePosition(req UpdatePositionReq) (*model.Position, error) {
 	position, err := pu.positionRepo.FindPosition(req.ID)
 	if err != nil {
-		return fmt.Errorf("positionRepo.FindPosition: %w", err)
+		return nil, fmt.Errorf("positionRepo.FindPosition: %w", err)
 	}
 
-	position.ChangePrice(req.Price)
+	position.ChangePrice(req.Price, pu.timer.Now())
 
-	if err = pu.positionRepo.UpdatePosition(position); err != nil {
-		return fmt.Errorf("positionRepo.UpdatePosition: %w", err)
+	if _, err = pu.positionRepo.UpdatePosition(position); err != nil {
+		return nil, fmt.Errorf("positionRepo.UpdatePosition: %w", err)
 	}
 
-	return nil
+	return position, nil
 }

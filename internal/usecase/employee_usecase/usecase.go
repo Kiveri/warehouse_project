@@ -2,6 +2,7 @@ package employee_usecase
 
 import (
 	"time"
+
 	"warehouse_project/internal/domain/model"
 )
 
@@ -14,7 +15,7 @@ type (
 		CreateEmployee(employee *model.Employee) (*model.Employee, error)
 		DeleteEmployee(id int64) error
 		FindEmployee(id int64) (*model.Employee, error)
-		UpdateEmployee(employee *model.Employee) error
+		UpdateEmployee(employee *model.Employee) (*model.Employee, error)
 	}
 	timer interface {
 		Now() time.Time

@@ -184,21 +184,33 @@ func (_c *PositionRepo_FindPosition_Call) RunAndReturn(run func(int64) (*model.P
 }
 
 // UpdatePosition provides a mock function with given fields: position
-func (_m *PositionRepo) UpdatePosition(position *model.Position) error {
+func (_m *PositionRepo) UpdatePosition(position *model.Position) (*model.Position, error) {
 	ret := _m.Called(position)
 
 	if len(ret) == 0 {
 		panic("no return value specified for UpdatePosition")
 	}
 
-	var r0 error
-	if rf, ok := ret.Get(0).(func(*model.Position) error); ok {
+	var r0 *model.Position
+	var r1 error
+	if rf, ok := ret.Get(0).(func(*model.Position) (*model.Position, error)); ok {
+		return rf(position)
+	}
+	if rf, ok := ret.Get(0).(func(*model.Position) *model.Position); ok {
 		r0 = rf(position)
 	} else {
-		r0 = ret.Error(0)
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*model.Position)
+		}
 	}
 
-	return r0
+	if rf, ok := ret.Get(1).(func(*model.Position) error); ok {
+		r1 = rf(position)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
 }
 
 // PositionRepo_UpdatePosition_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpdatePosition'
@@ -219,12 +231,12 @@ func (_c *PositionRepo_UpdatePosition_Call) Run(run func(position *model.Positio
 	return _c
 }
 
-func (_c *PositionRepo_UpdatePosition_Call) Return(_a0 error) *PositionRepo_UpdatePosition_Call {
-	_c.Call.Return(_a0)
+func (_c *PositionRepo_UpdatePosition_Call) Return(_a0 *model.Position, _a1 error) *PositionRepo_UpdatePosition_Call {
+	_c.Call.Return(_a0, _a1)
 	return _c
 }
 
-func (_c *PositionRepo_UpdatePosition_Call) RunAndReturn(run func(*model.Position) error) *PositionRepo_UpdatePosition_Call {
+func (_c *PositionRepo_UpdatePosition_Call) RunAndReturn(run func(*model.Position) (*model.Position, error)) *PositionRepo_UpdatePosition_Call {
 	_c.Call.Return(run)
 	return _c
 }

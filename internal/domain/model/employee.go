@@ -36,7 +36,7 @@ func (e *Employee) IsCanOrderCreate() bool {
 	return e.Role == Manager
 }
 
-func (e *Employee) ChangeRole(newRole EmployeeRole) {
+func (e *Employee) ChangeRole(newRole EmployeeRole, now time.Time) {
 	e.Role = newRole
-	e.UpdatedAt = time.Now()
+	e.UpdatedAt = now
 }

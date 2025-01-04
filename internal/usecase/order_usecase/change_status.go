@@ -2,6 +2,7 @@ package order_usecase
 
 import (
 	"fmt"
+
 	"warehouse_project/internal/domain/model"
 )
 
@@ -10,17 +11,17 @@ type UpdateOrderReq struct {
 	Status model.OrderStatus
 }
 
-func (ou *OrderUseCase) UpdateOrder(req UpdateOrderReq) error {
+func (ou *OrderUseCase) UpdateOrder(req UpdateOrderReq) (*model.Order, error) {
 	order, err := ou.orderRepo.FindOrder(req.ID)
 	if err != nil {
-		return fmt.Errorf("orderRepo.FindOrder: %w", err)
+		return nil, fmt.Errorf("orderRepo.FindOrder: %w", err)
 	}
 
-	order.ChangeStatus(req.Status)
+	order.ChangeStatus(req.Status, ou.timer.Now())
 
-	if err = ou.orderRepo.UpdateOrder(order); err != nil {
-		return fmt.Errorf("orderRepo.UpdateOrder: %w", err)
+	if _, err = ou.orderRepo.UpdateOrder(order); err != nil {
+		return nil, fmt.Errorf("orderRepo.UpdateOrder: %w", err)
 	}
 
-	return nil
+	return order, nil
 }

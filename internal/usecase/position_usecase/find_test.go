@@ -1,11 +1,11 @@
-package client_usecase
+package position_usecase
 
 import (
 	"errors"
 	"testing"
 
 	"warehouse_project/internal/domain/model"
-	"warehouse_project/internal/usecase/client_usecase/mocks"
+	"warehouse_project/internal/usecase/position_usecase/mocks"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -15,50 +15,50 @@ func TestFindUseCase(t *testing.T) {
 
 	errTest := errors.New("test error")
 
-	client := &model.Client{
+	position := &model.Position{
 		ID: 1,
 	}
 
 	type fields struct {
-		clientRepo *mocks.ClientRepo
-		timer      *mocks.Timer
+		positionRepo *mocks.PositionRepo
+		timer        *mocks.Timer
 	}
 
 	type args struct {
-		req FindClientReq
+		req FindPositionReq
 	}
 
 	tests := []struct {
 		name    string
 		args    args
-		want    *model.Client
+		want    *model.Position
 		wantErr bool
 		before  func(f fields, args args)
 	}{
 		{
 			name: "success",
 			args: args{
-				req: FindClientReq{
+				req: FindPositionReq{
 					ID: 1,
 				},
 			},
-			want: &model.Client{
+			want: &model.Position{
 				ID: 1,
 			},
 			before: func(f fields, args args) {
-				f.clientRepo.EXPECT().FindClient(args.req.ID).Return(client, nil)
+				f.positionRepo.EXPECT().FindPosition(args.req.ID).Return(position, nil)
 			},
 		},
 		{
 			name: "error on find",
 			args: args{
-				req: FindClientReq{
+				req: FindPositionReq{
 					ID: 2,
 				},
 			},
 			wantErr: true,
 			before: func(f fields, args args) {
-				f.clientRepo.EXPECT().FindClient(args.req.ID).Return(nil, errTest)
+				f.positionRepo.EXPECT().FindPosition(args.req.ID).Return(nil, errTest)
 			},
 		},
 	}
@@ -69,15 +69,15 @@ func TestFindUseCase(t *testing.T) {
 			a := assert.New(t)
 
 			f := fields{
-				clientRepo: mocks.NewClientRepo(t),
-				timer:      mocks.NewTimer(t),
+				positionRepo: mocks.NewPositionRepo(t),
+				timer:        mocks.NewTimer(t),
 			}
 
 			tt.before(f, tt.args)
 
-			uc := NewClientUseCase(f.clientRepo, f.timer)
+			uc := NewPositionUseCase(f.positionRepo, f.timer)
 
-			c, err := uc.FindClient(tt.args.req)
+			c, err := uc.FindPosition(tt.args.req)
 
 			if tt.wantErr {
 				a.Error(err)

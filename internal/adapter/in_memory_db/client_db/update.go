@@ -2,6 +2,7 @@ package client_db
 
 import (
 	"fmt"
+
 	"warehouse_project/internal/domain/model"
 )
 
