@@ -5,11 +5,11 @@ import (
 	"warehouse_project/internal/domain/model"
 )
 
-func (cr *ClientRepo) UpdateClient(client *model.Client) error {
+func (cr *ClientRepo) UpdateClient(client *model.Client) (*model.Client, error) {
 	if _, exists := cr.clientsMap[client.ID]; !exists {
-		return fmt.Errorf("employee with id %v does not exist", client.ID)
+		return nil, fmt.Errorf("employee with id %v does not exist", client.ID)
 	}
 	cr.clientsMap[client.ID] = client
 
-	return nil
+	return client, nil
 }

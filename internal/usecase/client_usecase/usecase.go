@@ -9,7 +9,7 @@ type (
 	clientRepo interface {
 		CreateClient(client *model.Client) (*model.Client, error)
 		FindClient(id int64) (*model.Client, error)
-		UpdateClient(client *model.Client) error
+		UpdateClient(client *model.Client) (*model.Client, error)
 		DeleteClient(id int64) error
 	}
 	timer interface {

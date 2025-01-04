@@ -184,21 +184,33 @@ func (_c *ClientRepo_FindClient_Call) RunAndReturn(run func(int64) (*model.Clien
 }
 
 // UpdateClient provides a mock function with given fields: client
-func (_m *ClientRepo) UpdateClient(client *model.Client) error {
+func (_m *ClientRepo) UpdateClient(client *model.Client) (*model.Client, error) {
 	ret := _m.Called(client)
 
 	if len(ret) == 0 {
 		panic("no return value specified for UpdateClient")
 	}
 
-	var r0 error
-	if rf, ok := ret.Get(0).(func(*model.Client) error); ok {
+	var r0 *model.Client
+	var r1 error
+	if rf, ok := ret.Get(0).(func(*model.Client) (*model.Client, error)); ok {
+		return rf(client)
+	}
+	if rf, ok := ret.Get(0).(func(*model.Client) *model.Client); ok {
 		r0 = rf(client)
 	} else {
-		r0 = ret.Error(0)
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*model.Client)
+		}
 	}
 
-	return r0
+	if rf, ok := ret.Get(1).(func(*model.Client) error); ok {
+		r1 = rf(client)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
 }
 
 // ClientRepo_UpdateClient_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpdateClient'
@@ -219,12 +231,12 @@ func (_c *ClientRepo_UpdateClient_Call) Run(run func(client *model.Client)) *Cli
 	return _c
 }
 
-func (_c *ClientRepo_UpdateClient_Call) Return(_a0 error) *ClientRepo_UpdateClient_Call {
-	_c.Call.Return(_a0)
+func (_c *ClientRepo_UpdateClient_Call) Return(_a0 *model.Client, _a1 error) *ClientRepo_UpdateClient_Call {
+	_c.Call.Return(_a0, _a1)
 	return _c
 }
 
-func (_c *ClientRepo_UpdateClient_Call) RunAndReturn(run func(*model.Client) error) *ClientRepo_UpdateClient_Call {
+func (_c *ClientRepo_UpdateClient_Call) RunAndReturn(run func(*model.Client) (*model.Client, error)) *ClientRepo_UpdateClient_Call {
 	_c.Call.Return(run)
 	return _c
 }

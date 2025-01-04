@@ -2,8 +2,12 @@ package client_usecase
 
 import "fmt"
 
-func (cu *ClientUseCase) DeleteClient(id int64) error {
-	if err := cu.clientRepo.DeleteClient(id); err != nil {
+type DeleteClientReq struct {
+	ID int64
+}
+
+func (cu *ClientUseCase) DeleteClient(req DeleteClientReq) error {
+	if err := cu.clientRepo.DeleteClient(req.ID); err != nil {
 		return fmt.Errorf("clientRepo.DeleteClient: %w", err)
 	}
 

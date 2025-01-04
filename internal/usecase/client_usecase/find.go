@@ -5,8 +5,12 @@ import (
 	"warehouse_project/internal/domain/model"
 )
 
-func (cu *ClientUseCase) FindClient(id int64) (*model.Client, error) {
-	client, err := cu.clientRepo.FindClient(id)
+type FindClientReq struct {
+	ID int64
+}
+
+func (cu *ClientUseCase) FindClient(req FindClientReq) (*model.Client, error) {
+	client, err := cu.clientRepo.FindClient(req.ID)
 	if err != nil {
 		return nil, fmt.Errorf("clientRepo.FindClient: %w", err)
 	}
