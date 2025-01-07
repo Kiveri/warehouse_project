@@ -22,14 +22,15 @@ type Order struct {
 	ID        int64
 	Positions []*Position
 	CreatedBy int64
+	Client    int64
 	Status    OrderStatus
 	DelType   DeliveryType
 	Total     float32
 	CreatedAt time.Time
-	UpdatedAt *time.Time
+	UpdatedAt time.Time
 }
 
-func NewOrder(positions []*Position, createdBy int64, delType DeliveryType, now time.Time) *Order {
+func NewOrder(positions []*Position, createdBy, client int64, delType DeliveryType, now time.Time) *Order {
 	var total float32
 	for _, position := range positions {
 		total += position.Price
@@ -38,9 +39,15 @@ func NewOrder(positions []*Position, createdBy int64, delType DeliveryType, now 
 	return &Order{
 		Positions: positions,
 		CreatedBy: createdBy,
+		Client:    client,
 		Status:    Created,
 		DelType:   delType,
 		Total:     total,
 		CreatedAt: now,
 	}
+}
+
+func (o *Order) ChangeStatus(newStatus OrderStatus, now time.Time) {
+	o.Status = newStatus
+	o.UpdatedAt = now
 }

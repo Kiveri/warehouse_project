@@ -5,9 +5,10 @@ import (
 )
 
 func (er *EmployeeRepo) DeleteEmployee(id int64) error {
-	if _, exists := er.employees[id]; !exists {
-		return fmt.Errorf("Employee not found")
+	if _, exists := er.employeesMap[id]; !exists {
+		return fmt.Errorf("employee not found")
 	}
-	delete(er.employees, id)
+	delete(er.employeesMap, id)
+
 	return nil
 }

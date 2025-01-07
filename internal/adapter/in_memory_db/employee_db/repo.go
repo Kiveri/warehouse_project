@@ -5,8 +5,8 @@ import (
 )
 
 type EmployeeRepo struct {
-	employees map[int64]*model.Employee
-	nextID    int64
+	employeesMap map[int64]*model.Employee
+	nextID       int64
 }
 
 func (er *EmployeeRepo) getNextID() int64 {
@@ -18,7 +18,7 @@ func (er *EmployeeRepo) getNextID() int64 {
 
 func NewEmployeeRepo() *EmployeeRepo {
 	return &EmployeeRepo{
-		employees: make(map[int64]*model.Employee),
-		nextID:    1,
+		employeesMap: make(map[int64]*model.Employee),
+		nextID:       1,
 	}
 }

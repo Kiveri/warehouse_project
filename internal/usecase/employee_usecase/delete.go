@@ -2,8 +2,12 @@ package employee_usecase
 
 import "fmt"
 
-func (eu *EmployeeUseCase) DeleteEmployee(id int64) error {
-	if err := eu.employeeRepo.DeleteEmployee(id); err != nil {
+type DeleteEmployeeReq struct {
+	ID int64
+}
+
+func (eu *EmployeeUseCase) DeleteEmployee(req DeleteEmployeeReq) error {
+	if err := eu.employeeRepo.DeleteEmployee(req.ID); err != nil {
 		return fmt.Errorf("employeeRepo.DeleteEmployee: %w", err)
 	}
 

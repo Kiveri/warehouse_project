@@ -3,8 +3,8 @@ package order_db
 import "warehouse_project/internal/domain/model"
 
 type OrderRepo struct {
-	orders map[int64]*model.Order
-	nextID int64
+	ordersMap map[int64]*model.Order
+	nextID    int64
 }
 
 func (or *OrderRepo) getNextID() int64 {
@@ -16,7 +16,7 @@ func (or *OrderRepo) getNextID() int64 {
 
 func NewOrderRepo() *OrderRepo {
 	return &OrderRepo{
-		orders: make(map[int64]*model.Order),
-		nextID: 1,
+		ordersMap: make(map[int64]*model.Order),
+		nextID:    1,
 	}
 }

@@ -13,7 +13,6 @@ const (
 type Employee struct {
 	ID        int64
 	Name      string
-	Surname   string
 	Phone     string
 	Email     string
 	Role      EmployeeRole
@@ -22,10 +21,9 @@ type Employee struct {
 	DeletedAt *time.Time
 }
 
-func NewEmployee(name, surname, phone, email string, role EmployeeRole, now time.Time) *Employee {
+func NewEmployee(name, phone, email string, role EmployeeRole, now time.Time) *Employee {
 	return &Employee{
 		Name:      name,
-		Surname:   surname,
 		Phone:     phone,
 		Email:     email,
 		Role:      role,
@@ -38,6 +36,7 @@ func (e *Employee) IsCanOrderCreate() bool {
 	return e.Role == Manager
 }
 
-func (e *Employee) ChangeRole(newRole EmployeeRole) {
+func (e *Employee) ChangeRole(newRole EmployeeRole, now time.Time) {
 	e.Role = newRole
+	e.UpdatedAt = now
 }
