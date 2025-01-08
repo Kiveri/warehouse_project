@@ -2,12 +2,9 @@ package main
 
 import (
 	"fmt"
-	"warehouse_project/internal/adapter/in_memory_db/client_db"
-	"warehouse_project/internal/adapter/in_memory_db/employee_db"
-	"warehouse_project/internal/adapter/in_memory_db/order_db"
-	"warehouse_project/internal/adapter/in_memory_db/position_db"
+
+	"warehouse_project/cmd/service_provider"
 	"warehouse_project/internal/domain/model"
-	"warehouse_project/internal/pkg/timer"
 	"warehouse_project/internal/usecase/client_usecase"
 	"warehouse_project/internal/usecase/employee_usecase"
 	"warehouse_project/internal/usecase/order_usecase"
@@ -15,17 +12,9 @@ import (
 )
 
 func main() {
-	employeeRepo := employee_db.NewEmployeeRepo()
-	positionRepo := position_db.NewPositionRepo()
-	orderRepo := order_db.NewOrderRepo()
-	clientRepo := client_db.NewClientRepo()
+	sp := service_provider.NewServiceProvider()
 
-	employeeUseCase := employee_usecase.NewEmployeeUseCase(employeeRepo, timer.NewTimer())
-	positionUseCase := position_usecase.NewPositionUseCase(positionRepo, timer.NewTimer())
-	orderUseCase := order_usecase.NewOrderUseCase(orderRepo, positionRepo, employeeRepo, clientRepo, timer.NewTimer())
-	clientUseCase := client_usecase.NewClientUseCase(clientRepo, timer.NewTimer())
-
-	createEmployee1, err := employeeUseCase.CreateEmployee(employee_usecase.CreateEmployeeReq{
+	createEmployee1, err := sp.GetEmployeeUseCase().CreateEmployee(employee_usecase.CreateEmployeeReq{
 		Name:  "Denis Popov",
 		Phone: "79995398037",
 		Email: "denpopov.m@gmail.com",
@@ -35,7 +24,7 @@ func main() {
 		fmt.Println(err)
 	}
 
-	createPosition1, err := positionUseCase.CreatePosition(position_usecase.CreatePositionReq{
+	createPosition1, err := sp.GetPositionUseCase().CreatePosition(position_usecase.CreatePositionReq{
 		Name:    "Электрический снегоуборщик Gigant SP-2300-460ES",
 		Barcode: "10001",
 		Price:   15349,
@@ -45,7 +34,7 @@ func main() {
 		fmt.Println(err)
 	}
 
-	createPosition2, err := positionUseCase.CreatePosition(position_usecase.CreatePositionReq{
+	createPosition2, err := sp.GetPositionUseCase().CreatePosition(position_usecase.CreatePositionReq{
 		Name:    "Светодиодная гирлянда TDM Шишки, 50 LED, 5м, 8 режимов, многоцветная, 250 В SQ0361-0050",
 		Barcode: "10002",
 		Price:   557,
@@ -55,7 +44,7 @@ func main() {
 		fmt.Println(err)
 	}
 
-	createPosition3, err := positionUseCase.CreatePosition(position_usecase.CreatePositionReq{
+	createPosition3, err := sp.GetPositionUseCase().CreatePosition(position_usecase.CreatePositionReq{
 		Name:    "Промывка двигателя LAVR 5-минутная классическая, 345 мл Ln1003N",
 		Barcode: "10003",
 		Price:   297,
@@ -72,7 +61,7 @@ func main() {
 		HomeAddress: "SPB",
 	}
 
-	createClient1, err := clientUseCase.CreateClient(clientReq)
+	createClient1, err := sp.GetClientUseCase().CreateClient(clientReq)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -84,7 +73,7 @@ func main() {
 		ClientID:     createClient1.ID,
 	}
 
-	createOrder1, err := orderUseCase.CreateOrder(orderReq)
+	createOrder1, err := sp.GetOrderUseCase().CreateOrder(orderReq)
 	if err != nil {
 		fmt.Println(err)
 	}
