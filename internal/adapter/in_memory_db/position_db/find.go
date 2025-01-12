@@ -2,6 +2,7 @@ package position_db
 
 import (
 	"fmt"
+
 	"warehouse_project/internal/domain/model"
 )
 

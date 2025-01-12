@@ -1,12 +1,31 @@
 package clients
 
-import "fmt"
+import (
+	"context"
+	"fmt"
 
-func (r *Repo) DeleteClient(id int64) error {
-	if _, exists := r.clientsMap[id]; !exists {
-		return fmt.Errorf("client with id %d does not found", id)
+	"warehouse_project/internal/domain/model"
+)
+
+func (r *Repo) DeleteClient(id int) (*model.Client, error) {
+	var deletedClient model.Client
+
+	err := r.cluster.Conn.QueryRow(context.Background(),
+		"DELETE FROM clients WHERE id = $1 "+
+			"RETURNING id, name, phone, email, home_address, created_at, updated_at", id).
+		Scan(
+			&deletedClient.ID,
+			&deletedClient.Name,
+			&deletedClient.Phone,
+			&deletedClient.Email,
+			&deletedClient.HomeAddress,
+			&deletedClient.CreatedAt,
+			&deletedClient.UpdatedAt,
+		)
+
+	if err != nil {
+		return nil, fmt.Errorf("r.cluster.QueryRow: %w", err)
 	}
-	delete(r.clientsMap, id)
 
-	return nil
+	return &deletedClient, nil
 }

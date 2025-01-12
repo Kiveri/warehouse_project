@@ -12,24 +12,24 @@ const (
 )
 
 type Position struct {
-	ID        int64
-	Name      string
-	Barcode   string
-	Price     float32
-	PosType   PositionType
-	CreatedAt time.Time
-	UpdatedAt time.Time
-	DeletedAt *time.Time
+	ID           int64
+	Name         string
+	Barcode      string
+	Price        float32
+	PositionType PositionType
+	CreatedAt    time.Time
+	UpdatedAt    time.Time
+	DeletedAt    *time.Time
 }
 
-func NewPosition(name, barcode string, price float32, posType PositionType, now time.Time) *Position {
+func NewPosition(name, barcode string, price float32, positionType PositionType, now time.Time) *Position {
 	return &Position{
-		Name:      name,
-		Barcode:   barcode,
-		Price:     price,
-		PosType:   posType,
-		CreatedAt: now,
-		UpdatedAt: now,
+		Name:         name,
+		Barcode:      barcode,
+		Price:        price,
+		PositionType: positionType,
+		CreatedAt:    now,
+		UpdatedAt:    now,
 	}
 }
 

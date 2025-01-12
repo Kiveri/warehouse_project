@@ -1,4 +1,4 @@
-package clients
+package employees
 
 import (
 	"context"
@@ -10,22 +10,22 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
-func (r *Repo) FindClient(id int) (*model.Client, error) {
-	var client model.Client
+func (r *Repo) FindEmployee(id int) (*model.Employee, error) {
+	var employee model.Employee
 
-	query := "SELECT id, name, phone, email, home_address, created_at, updated_at " +
-		"FROM clients " +
+	query := "SELECT id, name, phone, email, role, created_at, updated_at " +
+		"FROM employees " +
 		"WHERE id = $1"
 
 	err := r.cluster.Conn.QueryRow(context.Background(), query, id).
 		Scan(
-			&client.ID,
-			&client.Name,
-			&client.Phone,
-			&client.Email,
-			&client.HomeAddress,
-			&client.CreatedAt,
-			&client.UpdatedAt,
+			&employee.ID,
+			&employee.Name,
+			&employee.Phone,
+			&employee.Email,
+			&employee.Role,
+			&employee.CreatedAt,
+			&employee.UpdatedAt,
 		)
 
 	if err != nil {
@@ -35,5 +35,5 @@ func (r *Repo) FindClient(id int) (*model.Client, error) {
 		return nil, fmt.Errorf("FindClient: %w", err)
 	}
 
-	return &client, nil
+	return &employee, nil
 }

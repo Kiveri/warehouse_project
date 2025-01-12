@@ -1,6 +1,11 @@
 package model
 
-import "time"
+import (
+	"database/sql/driver"
+	"encoding/json"
+	"errors"
+	"time"
+)
 
 type (
 	OrderStatus  int
@@ -18,32 +23,57 @@ const (
 	PointOfDelivery DeliveryType = 3
 )
 
-type Order struct {
-	ID        int64
-	Positions []*Position
-	CreatedBy int64
-	Client    int64
-	Status    OrderStatus
-	DelType   DeliveryType
-	Total     float32
-	CreatedAt time.Time
-	UpdatedAt time.Time
+type OrderPosition struct {
+	ID         int64
+	PositionID int64
+	Quantity   int64
+	UnitPrice  float64
 }
 
-func NewOrder(positions []*Position, createdBy, client int64, delType DeliveryType, now time.Time) *Order {
-	var total float32
-	for _, position := range positions {
-		total += position.Price
+func NewOrderPosition(positionID, quantity int64, unitPrice float64) *OrderPosition {
+	return &OrderPosition{
+		PositionID: positionID,
+		Quantity:   quantity,
+		UnitPrice:  unitPrice,
+	}
+}
+
+func (op *OrderPosition) Value() (driver.Value, error) {
+	if op == nil {
+		return nil, nil
+	}
+	return json.Marshal(op)
+}
+
+func (op *OrderPosition) Scan(src interface{}) error {
+	b, ok := src.(string)
+	if !ok {
+		return errors.New("not a string")
 	}
 
+	return json.Unmarshal([]byte(b), &op)
+}
+
+type Order struct {
+	ID           int64
+	Positions    []*OrderPosition
+	EmployeeID   int64
+	ClientID     int64
+	Status       OrderStatus
+	DeliveryType DeliveryType
+	Total        float32
+	CreatedAt    time.Time
+	UpdatedAt    time.Time
+}
+
+func NewOrder(positions []*OrderPosition, employeeID, clientID int64, deliveryType DeliveryType, now time.Time) *Order {
 	return &Order{
-		Positions: positions,
-		CreatedBy: createdBy,
-		Client:    client,
-		Status:    Created,
-		DelType:   delType,
-		Total:     total,
-		CreatedAt: now,
+		Positions:    positions,
+		EmployeeID:   employeeID,
+		ClientID:     clientID,
+		Status:       Created,
+		DeliveryType: deliveryType,
+		CreatedAt:    now,
 	}
 }
 
