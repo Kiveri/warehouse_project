@@ -7,7 +7,7 @@ import (
 	"warehouse_project/internal/domain/model"
 )
 
-func (r *Repo) Save(ctx context.Context, o *model.Order) error {
+func (r *Repo) CreateOrder(ctx context.Context, o *model.Order) error {
 	query := `
 			INSERT INTO orders (positions, employeeID, clientID, status, deliveryType, total)
 		VALUES ($1, $2, $3, $4, $5, $6)

@@ -15,14 +15,14 @@ type Position struct {
 	ID           int64
 	Name         string
 	Barcode      string
-	Price        float32
+	Price        float64
 	PositionType PositionType
 	CreatedAt    time.Time
 	UpdatedAt    time.Time
 	DeletedAt    *time.Time
 }
 
-func NewPosition(name, barcode string, price float32, positionType PositionType, now time.Time) *Position {
+func NewPosition(name, barcode string, price float64, positionType PositionType, now time.Time) *Position {
 	return &Position{
 		Name:         name,
 		Barcode:      barcode,
@@ -33,7 +33,7 @@ func NewPosition(name, barcode string, price float32, positionType PositionType,
 	}
 }
 
-func (p *Position) ChangePrice(newPrice float32, now time.Time) {
+func (p *Position) ChangePrice(newPrice float64, now time.Time) {
 	p.Price = newPrice
 	p.UpdatedAt = now
 }

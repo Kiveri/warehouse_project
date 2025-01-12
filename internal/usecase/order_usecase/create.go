@@ -3,6 +3,7 @@ package order_usecase
 import (
 	"errors"
 	"fmt"
+
 	"warehouse_project/internal/domain/model"
 )
 
@@ -10,7 +11,7 @@ var EmployeeHasNoAccessToCreateOrder = errors.New("employee has no access to cre
 
 type CreateOrderReq struct {
 	EmployeeID   int64
-	PositionsIDs []int64
+	Positions []*model.OrderPosition
 	DeliveryType model.DeliveryType
 	ClientID     int64
 }
@@ -31,7 +32,7 @@ func (ou *OrderUseCase) CreateOrder(req CreateOrderReq) (*model.Order, error) {
 		return nil, fmt.Errorf("ou.ClientRepo.FindClient: %w", err)
 	}
 
-	positions, err := ou.positionRepo.FindAllByIDs(req.PositionsIDs)
+	positions, err :=
 	if err != nil {
 		return nil, fmt.Errorf("positionRepo.FindAllByIDs: %w", err)
 	}

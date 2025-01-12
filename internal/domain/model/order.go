@@ -61,19 +61,34 @@ type Order struct {
 	ClientID     int64
 	Status       OrderStatus
 	DeliveryType DeliveryType
-	Total        float32
+	Total        float64
 	CreatedAt    time.Time
 	UpdatedAt    time.Time
 }
 
-func NewOrder(positions []*OrderPosition, employeeID, clientID int64, deliveryType DeliveryType, now time.Time) *Order {
+func NewOrder(positions []*OrderPosition, employeeID, clientID int64, deliveryType DeliveryType, total float64, now time.Time) *Order {
 	return &Order{
 		Positions:    positions,
 		EmployeeID:   employeeID,
 		ClientID:     clientID,
 		Status:       Created,
 		DeliveryType: deliveryType,
+		Total:        total,
 		CreatedAt:    now,
+	}
+}
+
+func (o *Order) AddPosition(position *Position, now time.Time) {
+	for _, orderPosition := range o.Positions {
+		if orderPosition.PositionID == position.ID {
+			orderPosition.Quantity++
+			orderPosition.UnitPrice = position.Price * float64(orderPosition.Quantity)
+			o.Total += position.Price
+			o.UpdatedAt = now
+		} else {
+			o.Positions = append(o.Positions, orderPosition)
+			o.Total += orderPosition.UnitPrice
+		}
 	}
 }
 

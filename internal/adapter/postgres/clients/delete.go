@@ -3,29 +3,20 @@ package clients
 import (
 	"context"
 	"fmt"
-
-	"warehouse_project/internal/domain/model"
 )
 
-func (r *Repo) DeleteClient(id int64) (*model.Client, error) {
-	var deletedClient model.Client
+func (r *Repo) DeleteClient(id int64) error {
 
-	err := r.cluster.Conn.QueryRow(context.Background(),
-		"DELETE FROM clients WHERE id = $1 "+
-			"RETURNING id, name, phone, email, home_address, created_at, updated_at", id).
-		Scan(
-			&deletedClient.ID,
-			&deletedClient.Name,
-			&deletedClient.Phone,
-			&deletedClient.Email,
-			&deletedClient.HomeAddress,
-			&deletedClient.CreatedAt,
-			&deletedClient.UpdatedAt,
-		)
+	client, err := r.cluster.Conn.Exec(context.Background(),
+		"DELETE FROM clients WHERE id = $1", id)
 
 	if err != nil {
-		return nil, fmt.Errorf("r.cluster.QueryRow: %w", err)
+		return fmt.Errorf("r.cluster.QueryRow: %w", err)
 	}
 
-	return &deletedClient, nil
+	if client.RowsAffected() == 0 {
+		return fmt.Errorf("client with id %d not found", id)
+	}
+
+	return nil
 }

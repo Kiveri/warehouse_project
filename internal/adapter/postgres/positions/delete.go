@@ -3,29 +3,19 @@ package positions
 import (
 	"context"
 	"fmt"
-
-	"warehouse_project/internal/domain/model"
 )
 
-func (r *Repo) DeletePosition(id int64) (*model.Position, error) {
-	var deletedPosition model.Position
-
-	err := r.cluster.Conn.QueryRow(context.Background(),
-		"DELETE FROM positions WHERE id = $1 "+
-			"RETURNING id, name, barcode, price, position_type, created_at, updated_at", id).
-		Scan(
-			&deletedPosition.ID,
-			&deletedPosition.Name,
-			&deletedPosition.Barcode,
-			&deletedPosition.Price,
-			&deletedPosition.PositionType,
-			&deletedPosition.CreatedAt,
-			&deletedPosition.UpdatedAt,
-		)
+func (r *Repo) DeletePosition(id int64) error {
+	position, err := r.cluster.Conn.Exec(context.Background(),
+		"DELETE FROM positions WHERE id = $1 ", id)
 
 	if err != nil {
-		return nil, fmt.Errorf("r.cluster.QueryRow: %w", err)
+		return fmt.Errorf("r.cluster.QueryRow: %w", err)
 	}
 
-	return &deletedPosition, nil
+	if position.RowsAffected() == 0 {
+		return fmt.Errorf("position with id %d not found", id)
+	}
+
+	return nil
 }
