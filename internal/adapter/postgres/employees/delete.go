@@ -7,7 +7,7 @@ import (
 	"warehouse_project/internal/domain/model"
 )
 
-func (r *Repo) DeleteEmployee(id int) (*model.Employee, error) {
+func (r *Repo) DeleteEmployee(id int64) (*model.Employee, error) {
 	var deletedEmployee model.Employee
 
 	err := r.cluster.Conn.QueryRow(context.Background(),

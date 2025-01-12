@@ -10,7 +10,7 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
-func (r *Repo) FindClient(id int) (*model.Client, error) {
+func (r *Repo) FindClient(id int64) (*model.Client, error) {
 	var client model.Client
 
 	query := "SELECT id, name, phone, email, home_address, created_at, updated_at " +

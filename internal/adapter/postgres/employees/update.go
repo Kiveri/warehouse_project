@@ -39,7 +39,7 @@ func (r *Repo) UpdateEmployee(employee *model.Employee) (*model.Employee, error)
 	)
 
 	if err != nil {
-		return nil, fmt.Errorf("UpdateClient: failed to update client: %w", err)
+		return nil, fmt.Errorf("UpdateEmployee: failed to update employee: %w", err)
 	}
 
 	return &updatedEmployee, nil

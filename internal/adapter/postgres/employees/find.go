@@ -10,7 +10,7 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
-func (r *Repo) FindEmployee(id int) (*model.Employee, error) {
+func (r *Repo) FindEmployee(id int64) (*model.Employee, error) {
 	var employee model.Employee
 
 	query := "SELECT id, name, phone, email, role, created_at, updated_at " +
@@ -30,9 +30,9 @@ func (r *Repo) FindEmployee(id int) (*model.Employee, error) {
 
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
-			return nil, fmt.Errorf("no client found with id %d", id)
+			return nil, fmt.Errorf("no employee found with id %d", id)
 		}
-		return nil, fmt.Errorf("FindClient: %w", err)
+		return nil, fmt.Errorf("FindEmployee: %w", err)
 	}
 
 	return &employee, nil

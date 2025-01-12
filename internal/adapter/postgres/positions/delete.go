@@ -7,7 +7,7 @@ import (
 	"warehouse_project/internal/domain/model"
 )
 
-func (r *Repo) DeletePosition(id int) (*model.Position, error) {
+func (r *Repo) DeletePosition(id int64) (*model.Position, error) {
 	var deletedPosition model.Position
 
 	err := r.cluster.Conn.QueryRow(context.Background(),
