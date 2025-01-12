@@ -13,9 +13,10 @@ import (
 func (r *Repo) FindClient(id int64) (*model.Client, error) {
 	var client model.Client
 
-	query := "SELECT id, name, phone, email, home_address, created_at, updated_at " +
-		"FROM clients " +
-		"WHERE id = $1"
+	query := `
+		SELECT id, name, phone, email, home_address, created_at, updated_at 
+		FROM clients WHERE id = $1
+		`
 
 	err := r.cluster.Conn.QueryRow(context.Background(), query, id).
 		Scan(

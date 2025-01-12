@@ -11,11 +11,12 @@ import (
 func (r *Repo) UpdateClient(client *model.Client) (*model.Client, error) {
 	var updatedClient model.Client
 
-	query := "UPDATE clients SET name = $1, phone = $2, email = $3, home_address = $4, updated_at = $5 " +
-		"WHERE id = $6 " +
-		"RETURNING id, name, phone, email, home_address, created_at, updated_at"
+	query := `
+		UPDATE clients SET name = $1, phone = $2, email = $3, home_address = $4, updated_at = $5 
+		WHERE id = $6 
+		RETURNING id, name, phone, email, home_address, created_at, updated_at
+		`
 
-	// Установка метки времени обновления, если она еще не установлена
 	if client.UpdatedAt.IsZero() {
 		client.UpdatedAt = time.Now().UTC()
 	}

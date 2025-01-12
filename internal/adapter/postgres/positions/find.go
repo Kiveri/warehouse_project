@@ -13,9 +13,11 @@ import (
 func (r *Repo) FindPosition(id int64) (*model.Position, error) {
 	var position model.Position
 
-	query := "SELECT id, name, barcode, price, position_type, created_at, updated_at " +
-		"FROM positions " +
-		"WHERE id = $1"
+	query := `
+		SELECT id, name, barcode, price, position_type, created_at, updated_at 
+		FROM positions 
+		WHERE id = $1
+		`
 
 	err := r.cluster.Conn.QueryRow(context.Background(), query, id).
 		Scan(
