@@ -67,8 +67,11 @@ func main() {
 	}
 
 	orderReq := order_usecase.CreateOrderReq{
+		Positions: []*model.OrderPosition{
+			{PositionID: 1, Quantity: 2},
+			{PositionID: 2, Quantity: 3},
+		},
 		EmployeeID:   createEmployee1.ID,
-		PositionsIDs: []int64{createPosition1.ID, createPosition2.ID},
 		DeliveryType: model.CourierDelivery,
 		ClientID:     createClient1.ID,
 	}

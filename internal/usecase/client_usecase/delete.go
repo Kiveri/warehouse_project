@@ -7,7 +7,7 @@ type DeleteClientReq struct {
 }
 
 func (cu *ClientUseCase) DeleteClient(req DeleteClientReq) error {
-	if _, err := cu.clientRepo.DeleteClient(req.ID); err != nil {
+	if err := cu.clientRepo.DeleteClient(req.ID); err != nil {
 		return fmt.Errorf("clientRepo.DeleteClient: %w", err)
 	}
 

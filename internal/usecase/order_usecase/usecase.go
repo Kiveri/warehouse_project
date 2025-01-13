@@ -20,9 +20,10 @@ type (
 		FindOrder(id int64) (*model.Order, error)
 		UpdateOrder(order *model.Order) (*model.Order, error)
 		DeleteOrder(id int64) error
+		AddPositionToOrder(order *model.Order, positionID int64, quantity int64) error
 	}
 	positionRepo interface {
-		FindAllByIDs(id []int64) ([]*model.Position, error)
+		FindPosition(id int64) (*model.Position, error)
 	}
 	employeeRepo interface {
 		FindEmployee(id int64) (*model.Employee, error)
