@@ -13,7 +13,7 @@ type Cluster struct {
 
 func NewCluster(ctx context.Context) (*Cluster, error) {
 	dsn := fmt.Sprintf(
-		"postgres://localhost:5432?dbname=warehouse&user=postgres&password=10Denis00&sslmode=disable",
+		"postgres://localhost:5432?dbname=postgres&user=postgres&password=10Denis00&sslmode=disable",
 	)
 
 	fmt.Printf("dsn: %s\n", dsn)

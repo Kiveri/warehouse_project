@@ -1,6 +1,6 @@
 package order_usecase
 
-import "fmt"
+/*import "fmt"
 
 type DeleteOrderReq struct {
 	ID int64
@@ -13,3 +13,5 @@ func (ou *OrderUseCase) DeleteOrder(req DeleteOrderReq) error {
 
 	return nil
 }
+
+*/

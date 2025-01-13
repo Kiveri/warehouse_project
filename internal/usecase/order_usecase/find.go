@@ -1,6 +1,6 @@
 package order_usecase
 
-import (
+/*import (
 	"fmt"
 
 	"warehouse_project/internal/domain/model"
@@ -18,3 +18,5 @@ func (ou *OrderUseCase) FindOrder(req FindOrderReq) (*model.Order, error) {
 
 	return order, nil
 }
+
+*/

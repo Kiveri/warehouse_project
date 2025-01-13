@@ -1,10 +1,10 @@
 package service_provider
 
 import (
-	"warehouse_project/internal/adapter/in_memory_db/employee_db"
-	"warehouse_project/internal/adapter/in_memory_db/order_db"
-	"warehouse_project/internal/adapter/in_memory_db/position_db"
 	"warehouse_project/internal/adapter/postgres/clients"
+	"warehouse_project/internal/adapter/postgres/employees"
+	"warehouse_project/internal/adapter/postgres/orders"
+	"warehouse_project/internal/adapter/postgres/positions"
 	"warehouse_project/internal/config"
 	"warehouse_project/internal/pkg/timer"
 	"warehouse_project/internal/usecase/client_usecase"
@@ -21,9 +21,9 @@ type ServiceProvider struct {
 	orderUseCase    *order_usecase.OrderUseCase
 	clientUseCase   *client_usecase.ClientUseCase
 
-	employeeRepo *employee_db.EmployeeRepo
-	positionRepo *position_db.PositionRepo
-	orderRepo    *order_db.OrderRepo
+	employeeRepo *employees.Repo
+	positionRepo *positions.Repo
+	orderRepo    *orders.Repo
 	clientRepo   *clients.Repo
 
 	timer *timer.Timer

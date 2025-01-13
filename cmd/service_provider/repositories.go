@@ -3,31 +3,31 @@ package service_provider
 import (
 	"context"
 
-	"warehouse_project/internal/adapter/in_memory_db/employee_db"
-	"warehouse_project/internal/adapter/in_memory_db/order_db"
-	"warehouse_project/internal/adapter/in_memory_db/position_db"
 	"warehouse_project/internal/adapter/postgres/clients"
+	"warehouse_project/internal/adapter/postgres/employees"
+	"warehouse_project/internal/adapter/postgres/orders"
+	"warehouse_project/internal/adapter/postgres/positions"
 )
 
-func (sp *ServiceProvider) getEmployeeRepository() *employee_db.EmployeeRepo {
+func (sp *ServiceProvider) getEmployeeRepository() *employees.Repo {
 	if sp.employeeRepo == nil {
-		sp.employeeRepo = employee_db.NewEmployeeRepo()
+		sp.employeeRepo = employees.NewRepo(sp.getDbCluster(context.Background()))
 	}
 
 	return sp.employeeRepo
 }
 
-func (sp *ServiceProvider) getPositionRepository() *position_db.PositionRepo {
+func (sp *ServiceProvider) getPositionRepository() *positions.Repo {
 	if sp.positionRepo == nil {
-		sp.positionRepo = position_db.NewPositionRepo()
+		sp.positionRepo = positions.NewRepo(sp.getDbCluster(context.Background()))
 	}
 
 	return sp.positionRepo
 }
 
-func (sp *ServiceProvider) getOrderRepository() *order_db.OrderRepo {
+func (sp *ServiceProvider) getOrderRepository() *orders.Repo {
 	if sp.orderRepo == nil {
-		sp.orderRepo = order_db.NewOrderRepo()
+		sp.orderRepo = orders.NewRepo(sp.getDbCluster(context.Background()))
 	}
 
 	return sp.orderRepo

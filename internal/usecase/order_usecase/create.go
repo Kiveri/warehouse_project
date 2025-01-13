@@ -1,6 +1,7 @@
 package order_usecase
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"time"
@@ -80,8 +81,8 @@ func (ou *OrderUseCase) CreateOrder(req CreateOrderReq) (*model.Order, error) {
 			return nil, fmt.Errorf("ou.AddPositionToOrder: %w", err)
 		}
 	}
-
-	order, err = ou.orderRepo.CreateOrder(order)
+	ctx := context.Background()
+	order, err = ou.orderRepo.CreateOrder(ctx, order)
 	if err != nil {
 		return nil, fmt.Errorf("orderRepo.CreateOrder: %w", err)
 	}

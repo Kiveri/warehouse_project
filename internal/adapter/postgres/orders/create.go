@@ -10,7 +10,7 @@ import (
 
 func (r *Repo) CreateOrder(ctx context.Context, order *model.Order) (*model.Order, error) {
 	query := `
-			INSERT INTO orders (positions, employeeID, clientID, status, deliveryType, total, created_at, updated_at)
+			INSERT INTO orders (positions, employee_id, client_id, status, delivery_type, total, created_at, updated_at)
 		VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
 		RETURNING id
 		`
@@ -25,6 +25,7 @@ func (r *Repo) CreateOrder(ctx context.Context, order *model.Order) (*model.Orde
 		order.EmployeeID,
 		order.ClientID,
 		order.Status,
+		order.DeliveryType,
 		order.Total,
 		order.CreatedAt,
 		order.UpdatedAt,
