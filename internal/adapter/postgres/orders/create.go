@@ -8,7 +8,7 @@ import (
 	"warehouse_project/internal/domain/model"
 )
 
-func (r *Repo) CreateOrder(ctx context.Context, order *model.Order) (*model.Order, error) {
+func (r *Repo) CreateOrder(order *model.Order) (*model.Order, error) {
 	query := `
 			INSERT INTO orders (positions, employee_id, client_id, status, delivery_type, total, created_at, updated_at)
 		VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
@@ -20,7 +20,7 @@ func (r *Repo) CreateOrder(ctx context.Context, order *model.Order) (*model.Orde
 		return nil, fmt.Errorf("error encoding positions: %w", err)
 	}
 
-	err = r.cluster.Conn.QueryRow(ctx, query,
+	err = r.cluster.Conn.QueryRow(context.Background(), query,
 		positionsJSON,
 		order.EmployeeID,
 		order.ClientID,

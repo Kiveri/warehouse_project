@@ -9,20 +9,20 @@ import (
 )
 
 func (r *Repo) UpdateEmployee(employee *model.Employee) (*model.Employee, error) {
+	now := time.Now()
 	var updatedEmployee model.Employee
 
 	query := `
-		UPDATE employees SET name = $1, phone = $2, email = $3, home_address = $4, updated_at = $5 
+		UPDATE employees SET name = $1, phone = $2, email = $3, role = $4, updated_at = $5 
 		WHERE id = $6 
 		RETURNING id, name, phone, email, role, created_at, updated_at
 		`
 
 	if employee.UpdatedAt.IsZero() {
-		employee.UpdatedAt = time.Now().UTC()
+		employee.UpdatedAt = now
 	}
 
-	err := r.cluster.Conn.QueryRow(context.Background(),
-		query,
+	err := r.cluster.Conn.QueryRow(context.Background(), query,
 		employee.Name,
 		employee.Phone,
 		employee.Email,

@@ -9,6 +9,7 @@ import (
 )
 
 func (r *Repo) UpdateClient(client *model.Client) (*model.Client, error) {
+	now := time.Now()
 	var updatedClient model.Client
 
 	query := `
@@ -18,11 +19,10 @@ func (r *Repo) UpdateClient(client *model.Client) (*model.Client, error) {
 		`
 
 	if client.UpdatedAt.IsZero() {
-		client.UpdatedAt = time.Now().UTC()
+		client.UpdatedAt = now
 	}
 
-	err := r.cluster.Conn.QueryRow(context.Background(),
-		query,
+	err := r.cluster.Conn.QueryRow(context.Background(), query,
 		client.Name,
 		client.Phone,
 		client.Email,

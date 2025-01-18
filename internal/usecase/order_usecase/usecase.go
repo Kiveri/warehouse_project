@@ -1,7 +1,6 @@
 package order_usecase
 
 import (
-	"context"
 	"time"
 
 	"warehouse_project/internal/domain/model"
@@ -17,10 +16,10 @@ type OrderUseCase struct {
 
 type (
 	orderRepo interface {
-		CreateOrder(ctx context.Context, order *model.Order) (*model.Order, error)
-		//FindOrder(id int64) (*model.Order, error)
-		//UpdateOrder(order *model.Order) (*model.Order, error)
-		//DeleteOrder(id int64) error
+		CreateOrder(order *model.Order) (*model.Order, error)
+		FindOrder(id int64) (*model.Order, error)
+		UpdateOrder(order *model.Order) (*model.Order, error)
+		DeleteOrder(id int64) error
 	}
 	positionRepo interface {
 		FindPosition(id int64) (*model.Position, error)

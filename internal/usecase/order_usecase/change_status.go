@@ -1,6 +1,6 @@
 package order_usecase
 
-/*import (
+import (
 	"fmt"
 
 	"warehouse_project/internal/domain/model"
@@ -25,5 +25,3 @@ func (ou *OrderUseCase) UpdateOrder(req UpdateOrderReq) (*model.Order, error) {
 
 	return order, nil
 }
-
-*/
