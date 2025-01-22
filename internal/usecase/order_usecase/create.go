@@ -22,33 +22,37 @@ func (ou *OrderUseCase) CreateOrder(req CreateOrderReq) (*model.Order, error) {
 
 	employee, err := ou.employeeRepo.FindEmployee(req.EmployeeID)
 	if err != nil {
+
 		return nil, fmt.Errorf("employeeRepo.FindEmployee: %w", err)
 	}
 
 	if !employee.IsCanOrderCreate() {
+
 		return nil, EmployeeHasNoAccessToCreateOrder
 	}
 
 	client, err := ou.clientRepo.FindClient(req.ClientID)
 	if err != nil {
+
 		return nil, fmt.Errorf("ou.ClientRepo.FindClient: %w", err)
 	}
 
 	order := model.NewOrder(employee.ID, client.ID, req.DeliveryType, now)
-
 	for _, p := range req.Positions {
 		err = ou.AddPositionToOrder(AddPositionToOrderReq{
-			order:      order,
+			orderID:    order.ID,
 			positionID: p.PositionID,
 			quantity:   p.Quantity,
 		})
 		if err != nil {
+
 			return nil, fmt.Errorf("ou.AddPositionToOrder: %w", err)
 		}
 	}
 
 	order, err = ou.orderRepo.CreateOrder(order)
 	if err != nil {
+
 		return nil, fmt.Errorf("orderRepo.CreateOrder: %w", err)
 	}
 
