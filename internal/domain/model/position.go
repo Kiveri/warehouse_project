@@ -1,6 +1,12 @@
 package model
 
-import "time"
+import (
+	"database/sql/driver"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"time"
+)
 
 type PositionType int
 
@@ -31,6 +37,24 @@ func NewPosition(name, barcode string, price float64, positionType PositionType,
 		CreatedAt:    now,
 		UpdatedAt:    now,
 	}
+}
+
+func (p *Position) Value() (driver.Value, error) {
+	positionJSON, err := json.Marshal(p)
+	if err != nil {
+		return "", fmt.Errorf("failed to marshal position: %w", err)
+	}
+
+	return string(positionJSON), nil
+}
+
+func (p *Position) Scan(src interface{}) error {
+	b, ok := src.(string)
+	if !ok {
+		return errors.New("not a string")
+	}
+
+	return json.Unmarshal([]byte(b), &p)
 }
 
 func (p *Position) ChangePrice(newPrice float64, now time.Time) {

@@ -9,8 +9,13 @@ import (
 
 var EmployeeHasNoAccessToCreateOrder = errors.New("employee has no access to create order")
 
+// клиент выбирает позиции
+// идентификаторы позиций на создание заказа
+// + написать юзкейс списка позиций
+// + список заказов клиента (должна возвращаться шорт информация)
+
 type CreateOrderReq struct {
-	Positions    []*model.OrderPosition
+	PositionIDs  []int64
 	EmployeeID   int64
 	ClientID     int64
 	Status       model.OrderStatus
@@ -37,18 +42,19 @@ func (ou *OrderUseCase) CreateOrder(req CreateOrderReq) (*model.Order, error) {
 		return nil, fmt.Errorf("ou.ClientRepo.FindClient: %w", err)
 	}
 
-	order := model.NewOrder(employee.ID, client.ID, req.DeliveryType, now)
-	for _, p := range req.Positions {
-		err = ou.AddPositionToOrder(AddPositionToOrderReq{
-			orderID:    order.ID,
-			positionID: p.PositionID,
-			quantity:   p.Quantity,
-		})
+	positions := make([]*model.Position, 0, len(req.PositionIDs))
+	for _, positionID := range req.PositionIDs {
+		var position *model.Position
+		position, err = ou.positionRepo.FindPosition(positionID)
 		if err != nil {
-
-			return nil, fmt.Errorf("ou.AddPositionToOrder: %w", err)
+			return nil, fmt.Errorf("ou.positionRepo.FindPosition: %w", err)
 		}
+
+		positions = append(positions, position)
 	}
+
+	order := model.NewOrder(employee.ID, client.ID, req.DeliveryType, now)
+	order.AddPositions(positions)
 
 	order, err = ou.orderRepo.CreateOrder(order)
 	if err != nil {

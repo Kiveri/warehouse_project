@@ -1,7 +1,9 @@
 package model
 
 import (
+	"database/sql/driver"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"time"
 )
@@ -23,15 +25,14 @@ const (
 )
 
 type OrderPosition struct {
-	PositionID int64
-	Quantity   int64
-	UnitPrice  float64
-	Position   *Position
+	Quantity  int64
+	UnitPrice float64
+	Position  *Position
 }
 
 type Order struct {
 	ID           int64
-	Positions    []*OrderPosition
+	Positions    map[int64]*OrderPosition
 	EmployeeID   int64
 	ClientID     int64
 	Status       OrderStatus
@@ -44,6 +45,7 @@ type Order struct {
 func NewOrder(employeeID, clientID int64, deliveryType DeliveryType, now time.Time) *Order {
 	return &Order{
 		EmployeeID:   employeeID,
+		Positions:    make(map[int64]*OrderPosition),
 		ClientID:     clientID,
 		Status:       Created,
 		DeliveryType: deliveryType,
@@ -51,13 +53,13 @@ func NewOrder(employeeID, clientID int64, deliveryType DeliveryType, now time.Ti
 	}
 }
 
-func (o *Order) Value() (string, error) {
-	if o.Positions == nil {
+func (op *OrderPosition) Value() (driver.Value, error) {
+	if op.Position == nil {
 
-		return "", nil
+		return "[]", nil
 	}
 
-	positionsJSON, err := json.Marshal(o.Positions)
+	positionsJSON, err := json.Marshal(op.Position)
 	if err != nil {
 
 		return "", fmt.Errorf("failed to marshal positions: %w", err)
@@ -66,7 +68,7 @@ func (o *Order) Value() (string, error) {
 	return string(positionsJSON), nil
 }
 
-/*func (op *OrderPosition) Scan(src interface{}) error {
+func (op *OrderPosition) Scan(src interface{}) error {
 	b, ok := src.(string)
 	if !ok {
 		return errors.New("not a string")
@@ -75,29 +77,25 @@ func (o *Order) Value() (string, error) {
 	return json.Unmarshal([]byte(b), &op)
 }
 
-*/
-
 func (o *Order) ChangeStatus(newStatus OrderStatus, now time.Time) {
 	o.Status = newStatus
 	o.UpdatedAt = now
 }
 
-func (o *Order) AddPositions(positionID int64, quantity int64, unitPrice float64) error {
-	for _, orderPosition := range o.Positions {
-		if orderPosition.PositionID == positionID {
-			orderPosition.Quantity += quantity
-			orderPosition.UnitPrice = float64(orderPosition.Quantity) * unitPrice
+func (o *Order) AddPositions(positions []*Position) {
+	for _, position := range positions {
+		orderPosition, has := o.Positions[position.ID]
+		if has {
+			orderPosition.Quantity += 1
+			orderPosition.UnitPrice = float64(orderPosition.Quantity) * position.Price
 
-			return nil
+			o.Positions[position.ID] = orderPosition
+		} else {
+			o.Positions[position.ID] = &OrderPosition{
+				Position:  position,
+				Quantity:  1,
+				UnitPrice: position.Price,
+			}
 		}
 	}
-
-	newOrderPosition := &OrderPosition{
-		PositionID: positionID,
-		Quantity:   quantity,
-		UnitPrice:  float64(quantity) * unitPrice,
-	}
-	o.Positions = append(o.Positions, newOrderPosition)
-
-	return nil
 }
