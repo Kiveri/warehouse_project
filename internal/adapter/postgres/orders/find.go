@@ -2,7 +2,6 @@ package orders
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 
@@ -13,7 +12,6 @@ import (
 
 func (r *Repo) FindOrder(id int64) (*model.Order, error) {
 	var order model.Order
-	var positionsJSON []byte
 
 	query := `
 		SELECT * FROM orders
@@ -22,7 +20,7 @@ func (r *Repo) FindOrder(id int64) (*model.Order, error) {
 
 	err := r.cluster.Conn.QueryRow(context.Background(), query, id).Scan(
 		&order.ID,
-		&positionsJSON,
+		&order.Positions,
 		&order.EmployeeID,
 		&order.ClientID,
 		&order.Status,
@@ -36,10 +34,6 @@ func (r *Repo) FindOrder(id int64) (*model.Order, error) {
 			return nil, fmt.Errorf("order with id %d not found", id)
 		}
 		return nil, fmt.Errorf("error finding order with id %d: %w", id, err)
-	}
-
-	if err = json.Unmarshal(positionsJSON, &order.Positions); err != nil {
-		return nil, fmt.Errorf("error unmarshalling positions: %w", err)
 	}
 
 	return &order, nil

@@ -8,11 +8,14 @@ import (
 )
 
 func (r *Repo) CreateClient(client *model.Client) (*model.Client, error) {
-	if err := r.cluster.Conn.QueryRow(context.Background(),
+	err := r.cluster.Conn.QueryRow(context.Background(),
 		"INSERT INTO clients (name, phone, email, home_address, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6) "+
 			"RETURNING id",
 		client.Name, client.Phone, client.Email, client.HomeAddress, client.CreatedAt, client.UpdatedAt).
-		Scan(&client.ID); err != nil {
+		Scan(&client.ID)
+
+	if err != nil {
+
 		return nil, fmt.Errorf("Conn.QueryRow: %w", err)
 	}
 

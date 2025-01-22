@@ -31,8 +31,10 @@ func (r *Repo) FindClient(id int64) (*model.Client, error) {
 
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
+
 			return nil, fmt.Errorf("no client found with id %d", id)
 		}
+
 		return nil, fmt.Errorf("FindClient: %w", err)
 	}
 

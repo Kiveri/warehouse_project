@@ -2,7 +2,6 @@ package orders
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 
 	"warehouse_project/internal/domain/model"
@@ -15,13 +14,8 @@ func (r *Repo) CreateOrder(order *model.Order) (*model.Order, error) {
 		RETURNING id
 		`
 
-	positionsJSON, err := json.Marshal(order.Positions)
-	if err != nil {
-		return nil, fmt.Errorf("error encoding positions: %w", err)
-	}
-
-	err = r.cluster.Conn.QueryRow(context.Background(), query,
-		positionsJSON,
+	err := r.cluster.Conn.QueryRow(context.Background(), query,
+		order.Positions,
 		order.EmployeeID,
 		order.ClientID,
 		order.Status,
@@ -30,7 +24,9 @@ func (r *Repo) CreateOrder(order *model.Order) (*model.Order, error) {
 		order.CreatedAt,
 		order.UpdatedAt,
 	).Scan(&order.ID)
+
 	if err != nil {
+
 		return nil, fmt.Errorf("failed to save order: %w", err)
 	}
 

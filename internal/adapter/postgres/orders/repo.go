@@ -2,12 +2,10 @@ package orders
 
 import (
 	"warehouse_project/internal/config"
-	"warehouse_project/internal/domain/model"
 )
 
 type Repo struct {
-	cluster   *config.Cluster
-	ordersMap map[int64]*model.Order
+	cluster *config.Cluster
 }
 
 func NewRepo(cluster *config.Cluster) *Repo {
