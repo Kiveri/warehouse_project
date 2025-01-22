@@ -79,7 +79,7 @@ func main() {
 	//fmt.Println(createClient1)
 
 	mux := http.NewServeMux()
-	mux.HandleFunc("/client", sp.GetClientController().Create())
+	mux.HandleFunc("POST /clients", sp.GetClientController().Create())
 
 	err := http.ListenAndServe(":8080", mux)
 	if err != nil {
