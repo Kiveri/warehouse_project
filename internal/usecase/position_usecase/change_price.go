@@ -8,7 +8,7 @@ import (
 
 type UpdatePositionReq struct {
 	ID    int64
-	Price float32
+	Price float64
 }
 
 func (pu *PositionUseCase) UpdatePosition(req UpdatePositionReq) (*model.Position, error) {

@@ -2,11 +2,13 @@ package order_usecase
 
 import (
 	"errors"
-	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
+
 	"warehouse_project/internal/domain/model"
 	"warehouse_project/internal/usecase/order_usecase/mocks"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestCreateUseCase(t *testing.T) {
@@ -74,12 +76,12 @@ func TestCreateUseCase(t *testing.T) {
 						Price: 1234,
 					},
 				},
-				CreatedBy: 1,
-				Client:    1,
-				Status:    model.Created,
-				DelType:   model.CourierDelivery,
-				Total:     1234,
-				CreatedAt: now,
+				EmployeeID: 1,
+				ClientID:   1,
+				Status:     model.Created,
+				DelType:    model.CourierDelivery,
+				Total:      1234,
+				CreatedAt:  now,
 			},
 			before: func(f fields, args args) {
 				f.timer.EXPECT().Now().Return(now)

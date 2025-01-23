@@ -2,6 +2,7 @@ package client_usecase
 
 import (
 	"fmt"
+
 	"warehouse_project/internal/domain/model"
 )
 

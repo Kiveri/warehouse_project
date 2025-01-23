@@ -2,13 +2,14 @@ package position_usecase
 
 import (
 	"fmt"
+
 	"warehouse_project/internal/domain/model"
 )
 
 type CreatePositionReq struct {
 	Name    string
 	Barcode string
-	Price   float32
+	Price   float64
 	PosType model.PositionType
 }
 

@@ -22,7 +22,7 @@ type (
 		DeleteOrder(id int64) error
 	}
 	positionRepo interface {
-		FindAllByIDs(id []int64) ([]*model.Position, error)
+		FindPosition(id int64) (*model.Position, error)
 	}
 	employeeRepo interface {
 		FindEmployee(id int64) (*model.Employee, error)
