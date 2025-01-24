@@ -7,15 +7,15 @@ import (
 )
 
 type CreatePositionReq struct {
-	Name    string
-	Barcode string
-	Price   float64
-	PosType model.PositionType
+	Name         string
+	Barcode      string
+	Price        float64
+	PositionType model.PositionType
 }
 
 func (pu *PositionUseCase) CreatePosition(req CreatePositionReq) (*model.Position, error) {
 	now := pu.timer.Now()
-	position := model.NewPosition(req.Name, req.Barcode, req.Price, req.PosType, now)
+	position := model.NewPosition(req.Name, req.Barcode, req.Price, req.PositionType, now)
 	position, err := pu.positionRepo.CreatePosition(position)
 	if err != nil {
 		return nil, fmt.Errorf("positionRepo.CreatePosition: %w", err)

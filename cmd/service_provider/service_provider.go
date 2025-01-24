@@ -7,6 +7,9 @@ import (
 	"warehouse_project/internal/adapter/postgres/positions"
 	"warehouse_project/internal/config"
 	"warehouse_project/internal/controller/client_controller"
+	"warehouse_project/internal/controller/employee_controller"
+	"warehouse_project/internal/controller/order_controller"
+	"warehouse_project/internal/controller/position_controller"
 	"warehouse_project/internal/pkg/timer"
 	"warehouse_project/internal/usecase/client_usecase"
 	"warehouse_project/internal/usecase/employee_usecase"
@@ -27,7 +30,10 @@ type ServiceProvider struct {
 	orderRepo    *orders.Repo
 	clientRepo   *clients.Repo
 
-	clientController *client_controller.Controller
+	clientController   *client_controller.Controller
+	employeeController *employee_controller.Controller
+	orderController    *order_controller.Controller
+	positionController *position_controller.Controller
 
 	timer *timer.Timer
 }

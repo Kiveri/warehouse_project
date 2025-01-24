@@ -29,11 +29,10 @@ func TestCreateUseCase(t *testing.T) {
 		req CreateOrderReq
 	}
 
-	employee := &model.Employee{
+	employeeWithAccess := &model.Employee{
 		ID:   1,
 		Role: model.Manager,
 	}
-
 	employeeWithoutAccess := &model.Employee{
 		ID:   2,
 		Role: model.Specialist,
@@ -43,12 +42,26 @@ func TestCreateUseCase(t *testing.T) {
 		ID: 1,
 	}
 
-	positions := []*model.Position{
-		{
-			ID:    2,
-			Name:  "Позиция1",
-			Price: 1234,
-		},
+	position1 := &model.Position{
+		ID:    1,
+		Name:  "Name1",
+		Price: 100,
+	}
+	position2 := &model.Position{
+		ID:    2,
+		Name:  "Name2",
+		Price: 200,
+	}
+
+	orderPosition1 := &model.OrderPosition{
+		Quantity:  1,
+		UnitPrice: 100,
+		Position:  position1,
+	}
+	orderPosition2 := &model.OrderPosition{
+		Quantity:  1,
+		UnitPrice: 200,
+		Position:  position2,
 	}
 
 	tests := []struct {
@@ -62,33 +75,36 @@ func TestCreateUseCase(t *testing.T) {
 			name: "success",
 			args: args{
 				req: CreateOrderReq{
-					EmployeeID:   1,
-					PositionsIDs: []int64{2},
-					DeliveryType: model.CourierDelivery,
+					PositionIDs:  []int64{position1.ID, position2.ID},
+					EmployeeID:   employeeWithAccess.ID,
 					ClientID:     1,
+					Status:       model.Created,
+					DeliveryType: model.PointOfDelivery,
 				},
 			},
 			want: &model.Order{
-				Positions: []*model.Position{
-					{
-						ID:    2,
-						Name:  "Позиция1",
-						Price: 1234,
-					},
+				Positions: map[int64]*model.OrderPosition{
+					position1.ID: orderPosition1,
+					position2.ID: orderPosition2,
 				},
-				EmployeeID: 1,
-				ClientID:   1,
-				Status:     model.Created,
-				DelType:    model.CourierDelivery,
-				Total:      1234,
-				CreatedAt:  now,
+				EmployeeID:   employeeWithAccess.ID,
+				ClientID:     1,
+				Status:       model.Created,
+				DeliveryType: model.PointOfDelivery,
+				Total:        0,
+				CreatedAt:    now,
 			},
 			before: func(f fields, args args) {
 				f.timer.EXPECT().Now().Return(now)
-				f.employeeRepo.EXPECT().FindEmployee(args.req.EmployeeID).Return(employee, nil)
+				f.employeeRepo.EXPECT().FindEmployee(args.req.EmployeeID).Return(employeeWithAccess, nil)
 				f.clientRepo.EXPECT().FindClient(args.req.ClientID).Return(client, nil)
-				f.positionRepo.EXPECT().FindAllByIDs(args.req.PositionsIDs).Return(positions, nil)
-				order := model.NewOrder(positions, employee.ID, client.ID, args.req.DeliveryType, now)
+				f.positionRepo.EXPECT().FindPosition(position1.ID).Return(position1, nil)
+				f.positionRepo.EXPECT().FindPosition(position2.ID).Return(position2, nil)
+				order := model.NewOrder(employeeWithAccess.ID, client.ID, args.req.DeliveryType, now)
+				order.AddPositions([]*model.Position{
+					position1,
+					position2,
+				})
 				f.orderRepo.EXPECT().CreateOrder(order).Return(order, nil)
 			},
 		},
@@ -96,19 +112,25 @@ func TestCreateUseCase(t *testing.T) {
 			name: "error on create",
 			args: args{
 				req: CreateOrderReq{
-					EmployeeID:   1,
-					PositionsIDs: []int64{2},
-					DeliveryType: model.CourierDelivery,
+					PositionIDs:  []int64{position1.ID, position2.ID},
+					EmployeeID:   employeeWithAccess.ID,
 					ClientID:     1,
+					Status:       model.Created,
+					DeliveryType: model.PointOfDelivery,
 				},
 			},
 			wantErr: errTest,
 			before: func(f fields, args args) {
 				f.timer.EXPECT().Now().Return(now)
-				f.employeeRepo.EXPECT().FindEmployee(args.req.EmployeeID).Return(employee, nil)
+				f.employeeRepo.EXPECT().FindEmployee(args.req.EmployeeID).Return(employeeWithAccess, nil)
 				f.clientRepo.EXPECT().FindClient(args.req.ClientID).Return(client, nil)
-				f.positionRepo.EXPECT().FindAllByIDs(args.req.PositionsIDs).Return(positions, nil)
-				order := model.NewOrder(positions, employee.ID, client.ID, args.req.DeliveryType, now)
+				f.positionRepo.EXPECT().FindPosition(position1.ID).Return(position1, nil)
+				f.positionRepo.EXPECT().FindPosition(position2.ID).Return(position2, nil)
+				order := model.NewOrder(employeeWithAccess.ID, client.ID, args.req.DeliveryType, now)
+				order.AddPositions([]*model.Position{
+					position1,
+					position2,
+				})
 				f.orderRepo.EXPECT().CreateOrder(order).Return(nil, errTest)
 			},
 		},
@@ -116,10 +138,11 @@ func TestCreateUseCase(t *testing.T) {
 			name: "error no access",
 			args: args{
 				req: CreateOrderReq{
-					EmployeeID:   2,
-					PositionsIDs: []int64{2},
-					DeliveryType: model.CourierDelivery,
+					PositionIDs:  []int64{position1.ID, position2.ID},
+					EmployeeID:   employeeWithoutAccess.ID,
 					ClientID:     1,
+					Status:       model.Created,
+					DeliveryType: model.PointOfDelivery,
 				},
 			},
 			wantErr: EmployeeHasNoAccessToCreateOrder,
