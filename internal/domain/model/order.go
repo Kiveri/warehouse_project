@@ -88,8 +88,8 @@ func (o *Order) AddPositions(positions []*Position) {
 		if has {
 			orderPosition.Quantity += 1
 			orderPosition.UnitPrice = float64(orderPosition.Quantity) * position.Price
-
 			o.Positions[position.ID] = orderPosition
+			o.Total += orderPosition.Position.Price
 		} else {
 			o.Positions[position.ID] = &OrderPosition{
 				Position:  position,
@@ -97,5 +97,8 @@ func (o *Order) AddPositions(positions []*Position) {
 				UnitPrice: position.Price,
 			}
 		}
+	}
+	for _, orderPosition := range o.Positions {
+		o.Total += orderPosition.Position.Price
 	}
 }

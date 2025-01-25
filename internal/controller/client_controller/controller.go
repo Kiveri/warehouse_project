@@ -14,6 +14,7 @@ type (
 		CreateClient(req client_usecase.CreateClientReq) (*model.Client, error)
 		UpdateClient(req client_usecase.UpdateClientReq) (*model.Client, error)
 		FindClient(req client_usecase.FindClientReq) (*model.Client, error)
+		DeleteClient(req client_usecase.DeleteClientReq) error
 	}
 )
 

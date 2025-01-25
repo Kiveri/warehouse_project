@@ -60,6 +60,9 @@ func validateCreateOrderRequest(req createOrderRequest) *controller.ValidationEr
 	if req.PositionIDs == nil {
 		return controller.NewValidationError("positions is required", "position_ids")
 	}
+	if req.Status != 1 {
+		return controller.NewValidationError("status must be 1 - created", "status")
+	}
 
 	return nil
 }

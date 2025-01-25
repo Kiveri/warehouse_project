@@ -58,6 +58,9 @@ func validateCreateEmployeeRequest(req createEmployeeRequest) *controller.Valida
 	if req.Name == "" {
 		return controller.NewValidationError("name is required", "name")
 	}
+	if req.Role <= 0 || req.Role >= 4 {
+		return controller.NewValidationError("role 1 - specialist, 2 - leader, 3 - manager", "role")
+	}
 
 	return nil
 }

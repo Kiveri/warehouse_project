@@ -58,6 +58,13 @@ func validateCreatePositionRequest(req createPositionRequest) *controller.Valida
 	if req.Name == "" {
 		return controller.NewValidationError("name is required", "name")
 	}
+	if req.Price <= 0 {
+		return controller.NewValidationError("price must be positive", "price")
+	}
+	if req.PositionType <= 0 || req.PositionType >= 5 {
+		return controller.NewValidationError("position type 1 - BasicProduct, 2 - BasicConsumable 3 - Liquid, 4 - OversizeProduct",
+			"position_type")
+	}
 
 	return nil
 }
