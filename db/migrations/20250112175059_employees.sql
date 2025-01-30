@@ -4,7 +4,7 @@ create table employees
 (
     id         bigserial primary key,
     name       varchar(128) not null,
-    phone      varchar(12)  not null unique,
+    phone      varchar(11)  not null unique,
     email      varchar(128) not null unique,
     role       smallint     not null,
     created_at timestamptz  not null,

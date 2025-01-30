@@ -25,7 +25,6 @@ type Position struct {
 	PositionType PositionType
 	CreatedAt    time.Time
 	UpdatedAt    time.Time
-	DeletedAt    *time.Time
 }
 
 func NewPosition(name, barcode string, price float64, positionType PositionType, now time.Time) *Position {

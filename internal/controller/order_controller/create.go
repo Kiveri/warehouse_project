@@ -17,43 +17,37 @@ type createOrderRequest struct {
 	DeliveryType model.DeliveryType `json:"delivery_type"`
 }
 
-func (c *Controller) Create() func(http.ResponseWriter, *http.Request) {
-	return func(w http.ResponseWriter, r *http.Request) {
-		decoder := json.NewDecoder(r.Body)
-		var req createOrderRequest
-		err := decoder.Decode(&req)
-		if err != nil {
-			http.Error(w, err.Error(), 400)
-
-			return
-		}
-
-		if validationError := validateCreateOrderRequest(req); validationError != nil {
-			w.Header().Set("Content-Type", "application/json; charset=utf-8")
-			w.WriteHeader(400)
-			json.NewEncoder(w).Encode(validationError)
-
-			return
-		}
-
-		position, err := c.orderUseCase.CreateOrder(order_usecase.CreateOrderReq{
-			PositionIDs:  req.PositionIDs,
-			EmployeeID:   req.EmployeeID,
-			ClientID:     req.ClientID,
-			Status:       req.Status,
-			DeliveryType: req.DeliveryType,
-		})
-		if err != nil {
-			http.Error(w, err.Error(), 400)
-
-			return
-		}
-
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(position)
+func (c *Controller) Create(w http.ResponseWriter, r *http.Request) {
+	decoder := json.NewDecoder(r.Body)
+	var req createOrderRequest
+	err := decoder.Decode(&req)
+	if err != nil {
+		controller.ValidationErrorRespond(w, controller.NewValidationError("order id not present", "id"))
 
 		return
 	}
+
+	if validationError := validateCreateOrderRequest(req); validationError != nil {
+		controller.ValidationErrorRespond(w, validationError)
+
+		return
+	}
+
+	order, err := c.orderUseCase.CreateOrder(order_usecase.CreateOrderReq{
+		PositionIDs:  req.PositionIDs,
+		EmployeeID:   req.EmployeeID,
+		ClientID:     req.ClientID,
+		Status:       req.Status,
+		DeliveryType: req.DeliveryType,
+	})
+	if err != nil {
+		controller.InternalServer(w, err)
+
+		return
+	}
+
+	controller.Validation(w, http.StatusOK, order)
+
 }
 
 func validateCreateOrderRequest(req createOrderRequest) *controller.ValidationError {

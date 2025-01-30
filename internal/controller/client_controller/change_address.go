@@ -15,58 +15,47 @@ type changeAddressRequest struct {
 	HomeAddress string `json:"home_address"`
 }
 
-func (c *Controller) ChangeAddress() func(http.ResponseWriter, *http.Request) {
-	return func(w http.ResponseWriter, r *http.Request) {
-		id := r.PathValue("id")
-		clientID, err := strconv.ParseInt(id, 0, 64)
-		if err != nil {
-			w.Header().Set("Content-Type", "application/json; charset=utf-8")
-			w.WriteHeader(400)
-			json.NewEncoder(w).Encode(controller.NewValidationError("client id not present", "id"))
-
-			return
-		}
-
-		decoder := json.NewDecoder(r.Body)
-		var req changeAddressRequest
-		err = decoder.Decode(&req)
-		if err != nil {
-			http.Error(w, err.Error(), 400)
-
-			return
-		}
-
-		if validationError := validateChangeAddressRequest(req); validationError != nil {
-			w.Header().Set("Content-Type", "application/json; charset=utf-8")
-			w.WriteHeader(400)
-			json.NewEncoder(w).Encode(validationError)
-
-			return
-		}
-
-		updateClientAddress, err := c.clientUseCase.UpdateClient(client_usecase.UpdateClientReq{
-			ID:          clientID,
-			HomeAddress: req.HomeAddress,
-		})
-		if err != nil {
-			if errors.Is(err, clients.NotFound) {
-				w.Header().Set("Content-Type", "application/json; charset=utf-8")
-				w.WriteHeader(404)
-				json.NewEncoder(w).Encode(controller.NewNotFoundError("client id not found"))
-
-				return
-			}
-
-			http.Error(w, err.Error(), 500)
-
-			return
-		}
-
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(updateClientAddress)
+func (c *Controller) ChangeAddress(w http.ResponseWriter, r *http.Request) {
+	id := r.PathValue("id")
+	clientID, err := strconv.ParseInt(id, 0, 64)
+	if err != nil {
+		controller.ValidationErrorRespond(w, controller.NewValidationError("client id not present", "id"))
 
 		return
 	}
+
+	decoder := json.NewDecoder(r.Body)
+	var req changeAddressRequest
+	err = decoder.Decode(&req)
+	if err != nil {
+		controller.InternalServer(w, err)
+
+		return
+	}
+
+	if validationError := validateChangeAddressRequest(req); validationError != nil {
+		controller.ValidationErrorRespond(w, validationError)
+
+		return
+	}
+
+	updateClientAddress, err := c.clientUseCase.UpdateClient(client_usecase.UpdateClientReq{
+		ID:          clientID,
+		HomeAddress: req.HomeAddress,
+	})
+	if err != nil {
+		if errors.Is(err, clients.NotFound) {
+			controller.ValidationErrorRespond(w, controller.NewValidationError("client not found", "id"))
+
+			return
+		}
+
+		controller.InternalServer(w, err)
+
+		return
+	}
+
+	controller.Validation(w, http.StatusOK, updateClientAddress)
 }
 
 func validateChangeAddressRequest(req changeAddressRequest) *controller.ValidationError {

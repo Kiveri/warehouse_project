@@ -16,58 +16,47 @@ type changeRoleRequest struct {
 	Role model.EmployeeRole `json:"role"`
 }
 
-func (c *Controller) ChangeRole() func(http.ResponseWriter, *http.Request) {
-	return func(w http.ResponseWriter, r *http.Request) {
-		id := r.PathValue("id")
-		employeeID, err := strconv.ParseInt(id, 0, 64)
-		if err != nil {
-			w.Header().Set("Content-Type", "application/json; charset=utf-8")
-			w.WriteHeader(400)
-			json.NewEncoder(w).Encode(controller.NewValidationError("employee id not present", "id"))
-
-			return
-		}
-
-		decoder := json.NewDecoder(r.Body)
-		var req changeRoleRequest
-		err = decoder.Decode(&req)
-		if err != nil {
-			http.Error(w, err.Error(), 400)
-
-			return
-		}
-
-		if validationError := validateChangeRoleRequest(req); validationError != nil {
-			w.Header().Set("Content-Type", "application/json; charset=utf-8")
-			w.WriteHeader(400)
-			json.NewEncoder(w).Encode(validationError)
-
-			return
-		}
-
-		updateEmployeeRole, err := c.employeeUseCase.UpdateEmployee(employee_usecase.UpdateEmployeeReq{
-			ID:   employeeID,
-			Role: req.Role,
-		})
-		if err != nil {
-			if errors.Is(err, employees.NotFound) {
-				w.Header().Set("Content-Type", "application/json; charset=utf-8")
-				w.WriteHeader(404)
-				json.NewEncoder(w).Encode(controller.NewNotFoundError("employee id not found"))
-
-				return
-			}
-
-			http.Error(w, err.Error(), 500)
-
-			return
-		}
-
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(updateEmployeeRole)
+func (c *Controller) ChangeRole(w http.ResponseWriter, r *http.Request) {
+	id := r.PathValue("id")
+	employeeID, err := strconv.ParseInt(id, 0, 64)
+	if err != nil {
+		controller.ValidationErrorRespond(w, controller.NewValidationError("employee id not present", "id"))
 
 		return
 	}
+
+	decoder := json.NewDecoder(r.Body)
+	var req changeRoleRequest
+	err = decoder.Decode(&req)
+	if err != nil {
+		controller.ValidationErrorRespond(w, controller.NewValidationError("employee not found", "id"))
+
+		return
+	}
+
+	if validationError := validateChangeRoleRequest(req); validationError != nil {
+		controller.ValidationErrorRespond(w, validationError)
+
+		return
+	}
+
+	updateEmployeeRole, err := c.employeeUseCase.UpdateEmployee(employee_usecase.UpdateEmployeeReq{
+		ID:   employeeID,
+		Role: req.Role,
+	})
+	if err != nil {
+		if errors.Is(err, employees.NotFound) {
+			controller.ValidationErrorRespond(w, controller.NewValidationError("employee not found", "id"))
+
+			return
+		}
+
+		controller.InternalServer(w, err)
+
+		return
+	}
+
+	controller.Validation(w, http.StatusOK, updateEmployeeRole)
 }
 
 func validateChangeRoleRequest(req changeRoleRequest) *controller.ValidationError {
