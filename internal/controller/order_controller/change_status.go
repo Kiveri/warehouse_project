@@ -29,7 +29,7 @@ func (c *Controller) ChangeStatus(w http.ResponseWriter, r *http.Request) {
 	var req changeStatusRequest
 	err = decoder.Decode(&req)
 	if err != nil {
-		controller.ValidationErrorRespond(w, controller.NewValidationError("order not found", "id"))
+		controller.InternalServerErrorRespond(w, err)
 
 		return
 	}
@@ -46,17 +46,17 @@ func (c *Controller) ChangeStatus(w http.ResponseWriter, r *http.Request) {
 	})
 	if err != nil {
 		if errors.Is(err, orders.NotFound) {
-			controller.ValidationErrorRespond(w, controller.NewValidationError("order not found", "id"))
+			controller.NotFoundErrorRespond(w, controller.NewNotFoundError("order not found"))
 
 			return
 		}
 
-		controller.InternalServer(w, err)
+		controller.InternalServerErrorRespond(w, err)
 
 		return
 	}
 
-	controller.Validation(w, http.StatusOK, updateOrderStatus)
+	controller.Respond(w, http.StatusOK, updateOrderStatus)
 }
 
 func validateChangeStatusRequest(req changeStatusRequest) *controller.ValidationError {

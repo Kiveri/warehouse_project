@@ -28,7 +28,7 @@ func (c *Controller) ChangePrice(w http.ResponseWriter, r *http.Request) {
 	var req changePriceRequest
 	err = decoder.Decode(&req)
 	if err != nil {
-		controller.ValidationErrorRespond(w, controller.NewValidationError("position not found", "id"))
+		controller.InternalServerErrorRespond(w, err)
 
 		return
 	}
@@ -45,17 +45,17 @@ func (c *Controller) ChangePrice(w http.ResponseWriter, r *http.Request) {
 	})
 	if err != nil {
 		if errors.Is(err, positions.NotFound) {
-			controller.ValidationErrorRespond(w, controller.NewValidationError("position not found", "id"))
+			controller.NotFoundErrorRespond(w, controller.NewNotFoundError("position not found"))
 
 			return
 		}
 
-		controller.InternalServer(w, err)
+		controller.InternalServerErrorRespond(w, err)
 
 		return
 	}
 
-	controller.Validation(w, http.StatusOK, updatePriceStatus)
+	controller.Respond(w, http.StatusOK, updatePriceStatus)
 }
 
 func validateChangePriceRequest(req changePriceRequest) *controller.ValidationError {

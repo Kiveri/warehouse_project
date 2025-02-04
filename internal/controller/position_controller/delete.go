@@ -24,11 +24,11 @@ func (c *Controller) Delete(w http.ResponseWriter, r *http.Request) {
 	})
 	if err != nil {
 		if errors.Is(err, positions.NotFound) {
-			controller.ValidationErrorRespond(w, controller.NewValidationError("position not found", "id"))
+			controller.NotFoundErrorRespond(w, controller.NewNotFoundError("position not found"))
 
 			return
 		}
 
-		controller.InternalServer(w, err)
+		controller.InternalServerErrorRespond(w, err)
 	}
 }

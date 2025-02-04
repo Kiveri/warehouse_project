@@ -24,15 +24,15 @@ func (c *Controller) Find(w http.ResponseWriter, r *http.Request) {
 	})
 	if err != nil {
 		if errors.Is(err, employees.NotFound) {
-			controller.ValidationErrorRespond(w, controller.NewValidationError("employee not found", "id"))
+			controller.NotFoundErrorRespond(w, controller.NewNotFoundError("employee not found"))
 
 			return
 		}
 
-		controller.InternalServer(w, err)
+		controller.InternalServerErrorRespond(w, err)
 
 		return
 	}
 
-	controller.Validation(w, http.StatusOK, findEmployee)
+	controller.Respond(w, http.StatusOK, findEmployee)
 }

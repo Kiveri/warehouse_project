@@ -5,8 +5,8 @@ import (
 	"net/http"
 )
 
-// Validation отправляет JSON-ответ клиенту с указанным кодом статуса.
-func Validation(w http.ResponseWriter, status int, payload interface{}) {
+// Respond отправляет JSON-ответ клиенту с указанным кодом статуса.
+func Respond(w http.ResponseWriter, status int, payload interface{}) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(status)
 	if payload != nil {
@@ -16,10 +16,14 @@ func Validation(w http.ResponseWriter, status int, payload interface{}) {
 
 // ValidationErrorRespond отправляет JSON-ответ с ошибкой.
 func ValidationErrorRespond(w http.ResponseWriter, validationError *ValidationError) {
-	Validation(w, http.StatusBadRequest, validationError)
+	Respond(w, http.StatusBadRequest, validationError)
 }
 
-// InternalServer отправляет JSON-ответ с сообщением об ошибке сервера.
-func InternalServer(w http.ResponseWriter, err error) {
+// InternalServerErrorRespond отправляет JSON-ответ с сообщением об ошибке сервера.
+func InternalServerErrorRespond(w http.ResponseWriter, err error) {
 	http.Error(w, err.Error(), http.StatusInternalServerError)
+}
+
+func NotFoundErrorRespond(w http.ResponseWriter, notFoundError *NotFoundError) {
+	Respond(w, http.StatusNotFound, notFoundError)
 }

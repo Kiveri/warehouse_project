@@ -21,7 +21,7 @@ func (c *Controller) Create(w http.ResponseWriter, r *http.Request) {
 	var req createEmployeeRequest
 	err := decoder.Decode(&req)
 	if err != nil {
-		controller.InternalServer(w, err)
+		controller.InternalServerErrorRespond(w, err)
 
 		return
 	}
@@ -39,12 +39,12 @@ func (c *Controller) Create(w http.ResponseWriter, r *http.Request) {
 		Role:  req.Role,
 	})
 	if err != nil {
-		controller.InternalServer(w, err)
+		controller.InternalServerErrorRespond(w, err)
 
 		return
 	}
 
-	controller.Validation(w, http.StatusOK, employee)
+	controller.Respond(w, http.StatusOK, employee)
 }
 
 func validateCreateEmployeeRequest(req createEmployeeRequest) *controller.ValidationError {

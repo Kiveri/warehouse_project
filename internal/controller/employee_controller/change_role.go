@@ -29,7 +29,7 @@ func (c *Controller) ChangeRole(w http.ResponseWriter, r *http.Request) {
 	var req changeRoleRequest
 	err = decoder.Decode(&req)
 	if err != nil {
-		controller.ValidationErrorRespond(w, controller.NewValidationError("employee not found", "id"))
+		controller.InternalServerErrorRespond(w, err)
 
 		return
 	}
@@ -46,17 +46,17 @@ func (c *Controller) ChangeRole(w http.ResponseWriter, r *http.Request) {
 	})
 	if err != nil {
 		if errors.Is(err, employees.NotFound) {
-			controller.ValidationErrorRespond(w, controller.NewValidationError("employee not found", "id"))
+			controller.NotFoundErrorRespond(w, controller.NewNotFoundError("employee not found"))
 
 			return
 		}
 
-		controller.InternalServer(w, err)
+		controller.InternalServerErrorRespond(w, err)
 
 		return
 	}
 
-	controller.Validation(w, http.StatusOK, updateEmployeeRole)
+	controller.Respond(w, http.StatusOK, updateEmployeeRole)
 }
 
 func validateChangeRoleRequest(req changeRoleRequest) *controller.ValidationError {

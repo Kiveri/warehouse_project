@@ -20,7 +20,7 @@ func (c *Controller) Create(w http.ResponseWriter, r *http.Request) {
 	var req createClientRequest
 	err := decoder.Decode(&req)
 	if err != nil {
-		controller.InternalServer(w, err)
+		controller.InternalServerErrorRespond(w, err)
 
 		return
 	}
@@ -38,12 +38,12 @@ func (c *Controller) Create(w http.ResponseWriter, r *http.Request) {
 		HomeAddress: req.HomeAddress,
 	})
 	if err != nil {
-		controller.InternalServer(w, err)
+		controller.InternalServerErrorRespond(w, err)
 
 		return
 	}
 
-	controller.Validation(w, http.StatusOK, client)
+	controller.Respond(w, http.StatusOK, client)
 }
 
 func validateCreateClientRequest(req createClientRequest) *controller.ValidationError {

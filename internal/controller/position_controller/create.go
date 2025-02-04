@@ -39,12 +39,12 @@ func (c *Controller) Create(w http.ResponseWriter, r *http.Request) {
 		PositionType: req.PositionType,
 	})
 	if err != nil {
-		controller.InternalServer(w, err)
+		controller.InternalServerErrorRespond(w, err)
 
 		return
 	}
 
-	controller.Validation(w, http.StatusOK, position)
+	controller.Respond(w, http.StatusOK, position)
 }
 
 func validateCreatePositionRequest(req createPositionRequest) *controller.ValidationError {
