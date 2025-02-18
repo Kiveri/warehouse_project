@@ -44,7 +44,9 @@ func (c *Controller) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	controller.Respond(w, http.StatusOK, employee)
+	if err = controller.EncodeResponse(w, mapEmployeeToResponse(employee)); err != nil {
+		return
+	}
 }
 
 func validateCreateEmployeeRequest(req createEmployeeRequest) *controller.ValidationError {

@@ -39,7 +39,7 @@ func (c *Controller) ChangePrice(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	updatePriceStatus, err := c.positionUseCase.UpdatePosition(position_usecase.UpdatePositionReq{
+	updatePrice, err := c.positionUseCase.UpdatePosition(position_usecase.UpdatePositionReq{
 		ID:    positionID,
 		Price: req.Price,
 	})
@@ -55,7 +55,9 @@ func (c *Controller) ChangePrice(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	controller.Respond(w, http.StatusOK, updatePriceStatus)
+	if err = controller.EncodeResponse(w, mapPositionToResponse(updatePrice)); err != nil {
+		return
+	}
 }
 
 func validateChangePriceRequest(req changePriceRequest) *controller.ValidationError {

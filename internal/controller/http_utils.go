@@ -27,3 +27,17 @@ func InternalServerErrorRespond(w http.ResponseWriter, err error) {
 func NotFoundErrorRespond(w http.ResponseWriter, notFoundError *NotFoundError) {
 	Respond(w, http.StatusNotFound, notFoundError)
 }
+
+// EncodeResponse записывает данные из структуры в json и возвращает в качестве ответа
+func EncodeResponse(w http.ResponseWriter, response interface{}) error {
+	encoder := json.NewEncoder(w)
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	err := encoder.Encode(response)
+	if err != nil {
+		ValidationErrorRespond(w, NewValidationError("encode", "error writing json encoding"))
+
+		return err
+	}
+
+	return nil
+}

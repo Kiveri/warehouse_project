@@ -44,7 +44,9 @@ func (c *Controller) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	controller.Respond(w, http.StatusOK, position)
+	if err = controller.EncodeResponse(w, mapPositionToResponse(position)); err != nil {
+		return
+	}
 }
 
 func validateCreatePositionRequest(req createPositionRequest) *controller.ValidationError {

@@ -46,7 +46,9 @@ func (c *Controller) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	controller.Respond(w, http.StatusOK, order)
+	if err = controller.EncodeResponse(w, mapOrderResponse(order)); err != nil {
+		return
+	}
 
 }
 

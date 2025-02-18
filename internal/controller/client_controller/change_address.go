@@ -55,7 +55,9 @@ func (c *Controller) ChangeAddress(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	controller.Respond(w, http.StatusOK, updateClientAddress)
+	if err = controller.EncodeResponse(w, mapClientToResponse(updateClientAddress)); err != nil {
+		return
+	}
 }
 
 func validateChangeAddressRequest(req changeAddressRequest) *controller.ValidationError {

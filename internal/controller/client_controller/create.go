@@ -42,8 +42,9 @@ func (c *Controller) Create(w http.ResponseWriter, r *http.Request) {
 
 		return
 	}
-
-	controller.Respond(w, http.StatusOK, client)
+	if err = controller.EncodeResponse(w, mapClientToResponse(client)); err != nil {
+		return
+	}
 }
 
 func validateCreateClientRequest(req createClientRequest) *controller.ValidationError {

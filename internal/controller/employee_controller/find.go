@@ -34,5 +34,7 @@ func (c *Controller) Find(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	controller.Respond(w, http.StatusOK, findEmployee)
+	if err = controller.EncodeResponse(w, mapEmployeeToResponse(findEmployee)); err != nil {
+		return
+	}
 }

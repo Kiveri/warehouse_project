@@ -56,7 +56,9 @@ func (c *Controller) ChangeStatus(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	controller.Respond(w, http.StatusOK, updateOrderStatus)
+	if err = controller.EncodeResponse(w, mapOrderResponse(updateOrderStatus)); err != nil {
+		return
+	}
 }
 
 func validateChangeStatusRequest(req changeStatusRequest) *controller.ValidationError {

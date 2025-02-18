@@ -34,5 +34,7 @@ func (c *Controller) Find(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	controller.Respond(w, http.StatusOK, findOrder)
+	if err = controller.EncodeResponse(w, mapOrderResponse(findOrder)); err != nil {
+		return
+	}
 }

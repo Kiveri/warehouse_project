@@ -56,7 +56,9 @@ func (c *Controller) ChangeRole(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	controller.Respond(w, http.StatusOK, updateEmployeeRole)
+	if err = controller.EncodeResponse(w, mapEmployeeToResponse(updateEmployeeRole)); err != nil {
+		return
+	}
 }
 
 func validateChangeRoleRequest(req changeRoleRequest) *controller.ValidationError {

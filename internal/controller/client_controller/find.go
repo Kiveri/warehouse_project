@@ -37,5 +37,7 @@ func (c *Controller) Find(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Успешный ответ
-	controller.Respond(w, http.StatusOK, findClient)
+	if err = controller.EncodeResponse(w, mapClientToResponse(findClient)); err != nil {
+		return
+	}
 }
