@@ -18,7 +18,6 @@ type Employee struct {
 	Role      EmployeeRole
 	CreatedAt time.Time
 	UpdatedAt time.Time
-	DeletedAt *time.Time
 }
 
 func NewEmployee(name, phone, email string, role EmployeeRole, now time.Time) *Employee {

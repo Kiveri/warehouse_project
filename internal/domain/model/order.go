@@ -84,11 +84,11 @@ func (o *Order) ChangeStatus(newStatus OrderStatus, now time.Time) {
 
 func (o *Order) AddPositions(positions []*Position) {
 	for _, position := range positions {
+		o.Total += position.Price
 		orderPosition, has := o.Positions[position.ID]
 		if has {
 			orderPosition.Quantity += 1
 			orderPosition.UnitPrice = float64(orderPosition.Quantity) * position.Price
-
 			o.Positions[position.ID] = orderPosition
 		} else {
 			o.Positions[position.ID] = &OrderPosition{

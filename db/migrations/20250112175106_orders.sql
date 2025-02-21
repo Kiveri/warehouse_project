@@ -8,7 +8,7 @@ create table orders
     client_id     bigint,
     status        smallint,
     delivery_type smallint,
-    total         bigint, --not null
+    total         bigint not null,
     created_at    timestamptz not null,
     updated_at    timestamptz not null,
 
