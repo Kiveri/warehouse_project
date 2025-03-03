@@ -1,0 +1,36 @@
+services:
+  app:
+    build: .
+    container_name: my_app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    env_file:
+      - .env
+    networks:
+      - app-network
+    restart: always
+
+  db:
+    image: postgres:16-alpine
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 10Denis00
+      POSTGRES_DB: postgres
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - app-network
+    restart: unless-stopped
+
+volumes:
+  db_data:
+
+networks:
+  app-network:
+
+#  docker-compose up

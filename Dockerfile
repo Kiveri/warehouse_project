@@ -74,4 +74,4 @@ EXPOSE 8080
 # ./main:
 
 # Запускает собранное приложение.
-CMD ["bash", "-c", "et -o allexport; source /root/.env; set +o allexport; until pg_isready -h \"$DB_HOST\" -p \"$DB_PORT\"; do echo 'Waiting for PostgreSQL...'; sleep 2; done && goose -dir ./db/migrations postgres \"host=$DB_HOST user=$POSTGRES_USER password=$POSTGRES_PASSWORD dbname=$POSTGRES_DB sslmode=$POSTGRES_SSL_MODE\" up && ./main"]
+CMD ["bash", "-c", "goose -dir ./db/migrations postgres \"host=$DB_HOST user=$POSTGRES_USER password=$POSTGRES_PASSWORD dbname=$POSTGRES_DB sslmode=$POSTGRES_SSL_MODE\" up && ./main"]
